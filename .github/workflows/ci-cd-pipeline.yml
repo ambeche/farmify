@@ -24,7 +24,7 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12 
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "farmify"
+          heroku_app_name: "farmify-frontend"
           heroku_email: "tamanji.ambe@gmail.com"
           buildpack:  "https://buildpack-registry.s3.amazonaws.com/buildpacks/mars/create-react-app.tgz"
           healthcheck: "https://farmify-api.herokuapp.com/health"
