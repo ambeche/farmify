@@ -1,0 +1,46 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+jobs:
+  deployment-pipeline:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+      - name: dependencies installations 
+        run: npm install  
+      - name: lint
+        run: npm run lint
+      - name: deployment to heroku
+        if: ${{ github.event_name == 'push' }}
+        uses: akhileshns/heroku-deploy@v3.12.12 
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "farmify"
+          heroku_email: "tamanji.ambe@gmail.com"
+          buildpack:  "https://buildpack-registry.s3.amazonaws.com/buildpacks/mars/create-react-app.tgz"
+          healthcheck: "https://farmify-api.herokuapp.com/health"
+          checkstring: "ok"
+          rollbackonhealthcheckfailed: true
+  sermatic-versioning-of-releases:
+    needs: deployment-pipeline
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        if: ${{ github.event_name == 'push' }}
+        uses: anothrNick/github-tag-action@eca2b69f9e2c24be7decccd0f15fdb1ea5906598
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DEFAULT_BUMP: patch 
