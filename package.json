@@ -47,5 +47,11 @@
   "engines": {
     "node": "16.x",
     "npm": "8.x"
+  },
+  "overrides": {
+    "mini-css-extract-plugin": "2.4.5"
+  },
+  "devDependencies": {
+    "mini-css-extract-plugin": "2.4.5"
   }
 }
