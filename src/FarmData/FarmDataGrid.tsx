@@ -28,9 +28,9 @@ const FarmDataGrid = () => {
       <DataGrid
         rows={rows}
         columns={columns}
-       
-        
-        rowCount={100}
+        rowCount={rows.length}
+        pagination
+        paginationMode='server'
       />
     </div>
   );
