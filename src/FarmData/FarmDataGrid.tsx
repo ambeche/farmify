@@ -1,20 +1,18 @@
 import React, { useEffect } from 'react';
-import { GridRowsProp, DataGrid, GridColDef } from '@mui/x-data-grid';
-import farmData from '../services/farmData';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import {useAppDispatch} from '..';
+import {RootState, setFarmData, setPage, Action} from '../reducers/farmReducer';
+import {useSelector} from 'react-redux';
 
 const FarmDataGrid = () => {
-  //const [page, setPage] = React.useState(0);
-  const [rows, setRows] = React.useState<GridRowsProp>([]);
-  //const [loading, setLoading] = React.useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const {farmData, page} = useSelector((state:RootState)=> state);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const farmRecords = await farmData.getFarmData();
-      setRows(farmRecords);
-    };
-    void fetchData();
-  },[]);
-  console.log(rows)
+    dispatch( setFarmData(page.index) as unknown as Action)
+   
+  },[page]);
+  console.log(farmData)
 
   const columns: GridColDef[] = [
     { field: 'farmname', headerName: 'Farm Name' },
@@ -26,11 +24,13 @@ const FarmDataGrid = () => {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={rows}
+        rows={farmData}
         columns={columns}
-        rowCount={rows.length}
+        rowCount={farmData.length}
+       
         pagination
         paginationMode='server'
+        onPageChange={(newPage) => (dispatch(setPage(newPage) as unknown as Action))}
       />
     </div>
   );
