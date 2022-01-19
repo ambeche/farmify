@@ -20,18 +20,3 @@ export interface QueryParameters {
   metrictype?: MetricType;
   farmname?: string;
 }
-
-export type QueryParametersForValidation = {
-  month?: unknown;
-  year?: unknown;
-  limit?: unknown;
-  offset?: unknown;
-  metrictype?: unknown;
-  page?: unknown;
-  farmName?: unknown;
-};
-
-export type UserInputForValidation = {
-  username: unknown;
-  password: unknown;
-};
