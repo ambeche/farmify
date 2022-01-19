@@ -53,7 +53,7 @@ export const farmReducer = (
       };
     case 'SET_PAGE':
       return {
-        ...state, page:{...state.page, index: state.page.index+action.page}
+        ...state, page:{...state.page, index: state.page.index+1}
       };
     default:
       return state;
