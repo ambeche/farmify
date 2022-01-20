@@ -1,20 +1,33 @@
 import React, { useEffect } from 'react';
-import { GridRowsProp, DataGrid, GridColDef } from '@mui/x-data-grid';
-import farmData from '../services/farmData';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { useAppDispatch } from '..';
+import {
+  RootState,
+  setFarmData,
+  setPage,
+  Action,
+} from '../reducers/farmReducer';
+import { useSelector } from 'react-redux';
 
 const FarmDataGrid = () => {
-  //const [page, setPage] = React.useState(0);
-  const [rows, setRows] = React.useState<GridRowsProp>([]);
-  //const [loading, setLoading] = React.useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const { currentPage, nextPage, pages, farmData } = useSelector(
+    (state: RootState) => state
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      const farmRecords = await farmData.getFarmData();
-      setRows(farmRecords);
-    };
-    void fetchData();
-  },[]);
-  console.log(rows)
+    if (!pages.find((page) => page.index === currentPage)) {
+      dispatch(setFarmData(nextPage) as unknown as Action);
+    }
+  }, [nextPage, currentPage]);
+
+  console.log(
+    'itExist',
+    Boolean(pages.find((page) => page.index === currentPage))
+  );
+  console.log(nextPage);
+  console.log(currentPage);
+  console.log('data', pages);
 
   const columns: GridColDef[] = [
     { field: 'farmname', headerName: 'Farm Name' },
@@ -24,14 +37,23 @@ const FarmDataGrid = () => {
   ];
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        rowCount={rows.length}
-        pagination
-        paginationMode='server'
-      />
+    <div style={{ height: 600, width: '100%' }}>
+      <div style={{ display: 'flex', height: '100%' }}>
+        <div style={{ flexGrow: 1 }}>
+          <DataGrid
+            rows={pages[currentPage]?.farmData || farmData}
+            columns={columns}
+            rowCount={farmData?.length}
+            pageSize={100}
+            rowsPerPageOptions={[100]}
+            pagination
+            paginationMode="server"
+            onPageChange={(newPage) =>
+              dispatch(setPage(newPage) as unknown as Action)
+            }
+          />
+        </div>
+      </div>
     </div>
   );
 };
