@@ -37,7 +37,7 @@ const FarmDataGrid = () => {
   ];
 
   return (
-    <div style={{ height: 600, width: '100%' }}>
+    <div style={{ height: 500, width: '100%' }}>
       <div style={{ display: 'flex', height: '100%' }}>
         <div style={{ flexGrow: 1 }}>
           <DataGrid
