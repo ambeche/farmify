@@ -37,19 +37,23 @@ const FarmDataGrid = () => {
   ];
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={pages[currentPage]?.farmData || farmData}
-        columns={columns}
-        rowCount={farmData?.length}
-        pageSize={100}
-        rowsPerPageOptions={[100]}
-        pagination
-        paginationMode="server"
-        onPageChange={(newPage) =>
-          dispatch(setPage(newPage) as unknown as Action)
-        }
-      />
+    <div style={{ height: 600, width: '100%' }}>
+      <div style={{ display: 'flex', height: '100%' }}>
+        <div style={{ flexGrow: 1 }}>
+          <DataGrid
+            rows={pages[currentPage]?.farmData || farmData}
+            columns={columns}
+            rowCount={farmData?.length}
+            pageSize={100}
+            rowsPerPageOptions={[100]}
+            pagination
+            paginationMode="server"
+            onPageChange={(newPage) =>
+              dispatch(setPage(newPage) as unknown as Action)
+            }
+          />
+        </div>
+      </div>
     </div>
   );
 };
