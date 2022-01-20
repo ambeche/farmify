@@ -3,35 +3,32 @@ import { AnyAction } from 'redux';
 import farmData from '../services/farmData';
 import { FarmRecord } from './../types';
 
-interface Page {
+export interface Page {
   index: number;
-  size: number;
+  farmData: FarmRecord[];
 }
 export type Action =
   | {
       type: 'SET_FARM_DATA';
-      payload: FarmRecord[];
+      payload: Page;
     }
   | {
       type: 'SET_PAGE';
-      page: Page['index'];
-    }
-  | {
-      type: 'SET_PAGE_SIZE';
-      pageSize: Page['size'];
+      payload: number;
     };
 
 export type RootState = {
   farmData: FarmRecord[];
-  page: Page;
+  pages: Page[];
+  nextPage: number;
+  currentPage: number;
 };
 
 const initialState: RootState = {
   farmData: [],
-  page: {
-    index: 1,
-    size: 100,
-  },
+  pages: [],
+  nextPage: 0,
+  currentPage: 0,
 };
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -49,32 +46,40 @@ export const farmReducer = (
     case 'SET_FARM_DATA':
       return {
         ...state,
-        farmData: [...state.farmData, ...action.payload],
+        farmData: [...state.farmData, ...action.payload.farmData],
+        pages: [...state.pages, action.payload],
       };
     case 'SET_PAGE':
-      return {
-        ...state, page:{...state.page, index: state.page.index+1}
-      };
+      // controlls when next subset of data is fetched, if it already exits the state object, it is obtained from there.
+      if (!state.pages.find((page) => page.index === action.payload)) {
+        return {
+          ...state,
+          nextPage: state.nextPage + 1,
+          currentPage: action.payload,
+        };
+      }
+      return { ...state, currentPage: action.payload };
     default:
       return state;
   }
 };
 
-
 const setPage = (index: number) => {
   return {
     type: 'SET_PAGE',
-    page:index,
-  }
-}
+    payload: index,
+  };
+};
 
-
-const setFarmData = (page =1 ) => {
+const setFarmData = (page = 1) => {
   return async (
     dispatch: ThunkDispatch<RootState, void, AnyAction>
   ): Promise<void> => {
     try {
-      const payload = await farmData.getFarmData(page);
+      const farmRecords = await farmData.getFarmData(page);
+      const payload = { index: page, farmData: farmRecords };
+      console.log('newPage', page);
+
       dispatch({
         type: 'SET_FARM_DATA',
         payload,

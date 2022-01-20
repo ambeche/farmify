@@ -11,14 +11,24 @@ import { useSelector } from 'react-redux';
 
 const FarmDataGrid = () => {
   const dispatch = useAppDispatch();
-  const { farmData, page } = useSelector((state: RootState) => state);
+  const { currentPage, nextPage, pages, farmData } = useSelector(
+    (state: RootState) => state
+  );
 
   useEffect(() => {
-    dispatch(setFarmData(page.index) as unknown as Action);
-  }, [page.index]);
-  console.log(page.index);
-  console.log(farmData);
- 
+    if (!pages.find((page) => page.index === currentPage)) {
+      dispatch(setFarmData(nextPage) as unknown as Action);
+    }
+  }, [nextPage, currentPage]);
+
+  console.log(
+    'itExist',
+    Boolean(pages.find((page) => page.index === currentPage))
+  );
+  console.log(nextPage);
+  console.log(currentPage);
+  console.log('data', pages);
+
   const columns: GridColDef[] = [
     { field: 'farmname', headerName: 'Farm Name' },
     { field: 'datetime', headerName: 'Date' },
@@ -29,10 +39,11 @@ const FarmDataGrid = () => {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={farmData}
+        rows={pages[currentPage]?.farmData || farmData}
         columns={columns}
-        rowCount={farmData.length}
-        pageSize={50}
+        rowCount={farmData?.length}
+        pageSize={100}
+        rowsPerPageOptions={[100]}
         pagination
         paginationMode="server"
         onPageChange={(newPage) =>
