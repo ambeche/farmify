@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import {
   Chart as ChartJS,
+  BarController,
+  LineController,
   BarElement,
   LineElement,
   PointElement,
@@ -18,6 +20,8 @@ import MultiLineChartForAllFarms from './MultiLineChartForAllFarms';
 
 export {
   Chart as ChartJS,
+  BarController,
+  LineController,
   BarElement,
   LineElement,
   PointElement,
@@ -29,6 +33,8 @@ export {
 } from 'chart.js';
 
 export const Charts = ChartJS.register(
+  BarController,
+  LineController,
   BarElement,
   LineElement,
   PointElement,
