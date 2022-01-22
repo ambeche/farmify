@@ -23,7 +23,7 @@ const FarmDataGrid = () => {
 
   console.log(
     'itExist',
-    Boolean(pages.find((page) => page.index === currentPage)),
+    Boolean(pages.find((page) => page.index === currentPage))
   );
 
   const columns: GridColDef[] = [
@@ -34,7 +34,7 @@ const FarmDataGrid = () => {
   ];
 
   return (
-    <div style={{ height: 400, width: '50%', margin: 40 }}>
+    <div style={{ height: 400, width: '100%', margin: 5 }}>
       <div style={{ display: 'flex', height: '100%' }}>
         <div style={{ flexGrow: 1 }}>
           <DataGrid
