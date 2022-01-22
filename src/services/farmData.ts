@@ -29,6 +29,7 @@ const getFarmData = async (page = 1): Promise<FarmRecord[]> => {
   return res.data;
 };
 
+//statistics for a single farm
 const getFarmStatisticsByName = async (): Promise<FarmStatistics[]> => {
   const res = await axios.get<FarmStatistics[]>(
     `${baseUrl}/farms/statistics?farmname=${
@@ -40,13 +41,13 @@ const getFarmStatisticsByName = async (): Promise<FarmStatistics[]> => {
   return res.data;
 };
 
-// fetch aggregations from 4 different farms in a given year
+// fetch monthly aggregations from 4 different farms {12 months * 4 for 4 farms } in a given year
 // next set of farms are fetched using the page parameter
 const getFarmStatistics = async (page = 1): Promise<FarmStatistics[]> => {
   const res = await axios.get<FarmStatistics[]>(
     `${baseUrl}/farms/statistics?&metrictype=${
       metrictype || statsDefaultMetric
-    }&year=${year || statsDefaultYear}&limit=144&page=${page}`
+    }&year=${year || statsDefaultYear}&limit=48&page=${page}`
   );
   return res.data;
 };

@@ -1,39 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Chart } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  BarElement,
-  LineElement,
-  PointElement,
-  LinearScale,
-  CategoryScale,
-  Legend,
-  Title,
-  Tooltip,
-} from 'chart.js';
-import { useAppDispatch } from '..';
+import '../FarmCharts/FarmCharts';
 import { useSelector } from 'react-redux';
-import { RootState, Action, setFarmStatistics } from '../reducers/farmReducer';
+import { RootState } from '../reducers/farmReducer';
 import { MONTHS, getColorByMetric } from '../utils';
 
-ChartJS.register(
-  BarElement,
-  LineElement,
-  PointElement,
-  LinearScale,
-  CategoryScale,
-  Legend,
-  Title,
-  Tooltip
-);
-
 const BarAndLineCharts = () => {
-  const dispatch = useAppDispatch();
   const { farmStats } = useSelector((state: RootState) => state);
-
-  useEffect(() => {
-    dispatch(setFarmStatistics(false) as unknown as Action);
-  }, []);
 
   const colors = getColorByMetric(farmStats.singleFarm[0]?.metrictype);
 
