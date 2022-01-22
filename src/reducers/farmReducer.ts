@@ -1,7 +1,7 @@
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import farmData from '../services/farmData';
-import { FarmRecord } from './../types';
+import { FarmRecord, FarmStatistics, MetricType } from './../types';
 
 export interface Page {
   index: number;
@@ -15,6 +15,10 @@ export type Action =
   | {
       type: 'SET_PAGE';
       payload: number;
+    }
+  | {
+      type: 'SET_FARM_STATISTICS';
+      payload: FarmStatistics[];
     };
 
 export type RootState = {
@@ -22,6 +26,7 @@ export type RootState = {
   pages: Page[];
   nextPage: number;
   currentPage: number;
+  farmStats: FarmStatistics[];
 };
 
 const initialState: RootState = {
@@ -29,14 +34,8 @@ const initialState: RootState = {
   pages: [],
   nextPage: 0,
   currentPage: 0,
+  farmStats: [],
 };
-
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  AnyAction
->;
 
 export const farmReducer = (
   state = initialState,
@@ -59,6 +58,11 @@ export const farmReducer = (
         };
       }
       return { ...state, currentPage: action.payload };
+    case 'SET_FARM_STATISTICS':
+      return {
+        ...state,
+        farmStats: [...action.payload],
+      };
     default:
       return state;
   }
@@ -78,7 +82,6 @@ const setFarmData = (page = 1) => {
     try {
       const farmRecords = await farmData.getFarmData(page);
       const payload = { index: page, farmData: farmRecords };
-      console.log('newPage', page);
 
       dispatch({
         type: 'SET_FARM_DATA',
@@ -91,4 +94,32 @@ const setFarmData = (page = 1) => {
   };
 };
 
-export { setFarmData, setPage };
+const setFarmStatistics = (
+  limit = 12,
+  year = 2019,
+  metrictype = 'temperature' as MetricType,
+  farmname = 'Friman Metsola collective'
+) => {
+  return async (
+    dispatch: ThunkDispatch<RootState, void, AnyAction>
+  ): Promise<void> => {
+    try {
+      const payload = await farmData.getFarmStatistics({
+        limit,
+        year,
+        metrictype,
+        farmname,
+      });
+
+      dispatch({
+        type: 'SET_FARM_STATISTICS',
+        payload,
+      });
+    } catch (error) {
+      if (error instanceof Error)
+        console.log('StatsDispatchError', error.message);
+    }
+  };
+};
+
+export { setFarmData, setPage, setFarmStatistics };
