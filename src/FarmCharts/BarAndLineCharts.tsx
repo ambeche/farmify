@@ -32,10 +32,10 @@ const BarAndLineCharts = () => {
   const { farmStats } = useSelector((state: RootState) => state);
 
   useEffect(() => {
-    dispatch(setFarmStatistics() as unknown as Action);
+    dispatch(setFarmStatistics(false) as unknown as Action);
   }, []);
 
-  const colors = getColorByMetric(farmStats[0]?.metrictype);
+  const colors = getColorByMetric(farmStats.singleFarm[0]?.metrictype);
 
   const data = {
     labels: MONTHS,
@@ -44,20 +44,20 @@ const BarAndLineCharts = () => {
         type: 'line' as const,
         label: 'average',
         fill: false,
-        data: farmStats.map((stats) => stats.average),
+        data: farmStats.singleFarm.map((stats) => stats.average),
         borderColor: colors.avg,
       },
       {
         type: 'bar' as const,
         label: 'Min',
-        data: farmStats.map((stats) => stats.min),
+        data: farmStats.singleFarm.map((stats) => stats.min),
         backgroundColor: colors.min,
         borderColor: colors.min,
       },
       {
         type: 'bar' as const,
         label: 'Max',
-        data: farmStats.map((stats) => stats.max),
+        data: farmStats.singleFarm.map((stats) => stats.max),
         backgroundColor: colors.max,
         borderColor: colors.max,
       },

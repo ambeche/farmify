@@ -1,7 +1,7 @@
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import farmData from '../services/farmData';
-import { FarmRecord, FarmStatistics, MetricType } from './../types';
+import { FarmRecord, FarmStatistics } from './../types';
 
 export interface Page {
   index: number;
@@ -17,7 +17,11 @@ export type Action =
       payload: number;
     }
   | {
-      type: 'SET_FARM_STATISTICS';
+      type: 'SET_SINGLE_FARM_STATISTICS';
+      payload: FarmStatistics[];
+    }
+  | {
+      type: 'SET_COMBINED_FARMS_STATISTICS';
       payload: FarmStatistics[];
     };
 
@@ -26,7 +30,10 @@ export type RootState = {
   pages: Page[];
   nextPage: number;
   currentPage: number;
-  farmStats: FarmStatistics[];
+  farmStats: {
+    singleFarm: FarmStatistics[];
+    combinedFarms: FarmStatistics[];
+  };
 };
 
 const initialState: RootState = {
@@ -34,7 +41,10 @@ const initialState: RootState = {
   pages: [],
   nextPage: 0,
   currentPage: 0,
-  farmStats: [],
+  farmStats: {
+    singleFarm: [],
+    combinedFarms: [],
+  },
 };
 
 export const farmReducer = (
@@ -58,10 +68,15 @@ export const farmReducer = (
         };
       }
       return { ...state, currentPage: action.payload };
-    case 'SET_FARM_STATISTICS':
+    case 'SET_SINGLE_FARM_STATISTICS':
       return {
         ...state,
-        farmStats: [...action.payload],
+        farmStats: { ...state.farmStats, singleFarm: [...action.payload] },
+      };
+    case 'SET_COMBINED_FARMS_STATISTICS':
+      return {
+        ...state,
+        farmStats: { ...state.farmStats, combinedFarms: [...action.payload] },
       };
     default:
       return state;
@@ -94,27 +109,26 @@ const setFarmData = (page = 1) => {
   };
 };
 
-const setFarmStatistics = (
-  limit = 12,
-  year = 2019,
-  metrictype = 'rainfall' as MetricType,
-  farmname = 'Friman Metsola collective'
-) => {
+const setFarmStatistics = (isCombined: boolean, page?: number) => {
   return async (
     dispatch: ThunkDispatch<RootState, void, AnyAction>
   ): Promise<void> => {
     try {
-      const payload = await farmData.getFarmStatistics({
-        limit,
-        year,
-        metrictype,
-        farmname,
-      });
-
+      if (isCombined) {
+        const payload = await farmData.getFarmStatistics(page);
+        dispatch({
+          type: 'SET_COMBINED_FARMS_STATISTICS',
+          payload,
+        });
+        console.log('combined', payload);
+        return;
+      }
+      const payload = await farmData.getFarmStatisticsByName();
       dispatch({
-        type: 'SET_FARM_STATISTICS',
+        type: 'SET_SINGLE_FARM_STATISTICS',
         payload,
       });
+      console.log('single', payload);
     } catch (error) {
       if (error instanceof Error)
         console.log('StatsDispatchError', error.message);

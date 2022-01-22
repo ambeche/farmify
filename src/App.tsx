@@ -7,8 +7,9 @@ const App = () => {
   return (
     <div>
       <MainAppBar />
-      <FarmDataGrid />
       <BarAndLineCharts />
+      <FarmDataGrid />
+      
     </div>
   );
 };
