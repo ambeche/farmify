@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       flexGrow: 1,
     },
-  }),
+  })
 );
 
 const MainAppBar = () => {
@@ -27,13 +27,13 @@ const MainAppBar = () => {
       <AppBar position="sticky">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Farmifyy
+            Farmify
           </Typography>
           <Button color="inherit"></Button>
         </Toolbar>
       </AppBar>
     </div>
   );
-}
+};
 
 export default MainAppBar;

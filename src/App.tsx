@@ -1,14 +1,17 @@
 import React from 'react';
+import FarmCharts from './FarmCharts/FarmCharts';
 import FarmDataGrid from './FarmData/FarmDataGrid';
 import MainAppBar from './MainAppBar';
 
 const App = () => {
   return (
-    <div >
+    <div>
       <MainAppBar />
-     <FarmDataGrid/>
+      <FarmCharts />
+      <FarmDataGrid />
+      
     </div>
   );
-}
+};
 
 export default App;

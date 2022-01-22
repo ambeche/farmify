@@ -11,6 +11,16 @@ export interface FarmRecord {
   value: number;
 }
 
+type FarmRecordWithOmittedAttributes = Omit<FarmRecord, 'datetime' | 'value'>;
+
+export interface FarmStatistics extends FarmRecordWithOmittedAttributes {
+  numberofRecords: number;
+  month: Date;
+  min: number;
+  max: number;
+  average: number;
+}
+
 export interface QueryParameters {
   month?: number;
   year?: number;
