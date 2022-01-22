@@ -1,5 +1,5 @@
 import React from 'react';
-import BarChart from './FarmCharts/BarChart';
+import BarAndLineCharts from './FarmCharts/BarAndLineCharts';
 import FarmDataGrid from './FarmData/FarmDataGrid';
 import MainAppBar from './MainAppBar';
 
@@ -8,7 +8,7 @@ const App = () => {
     <div>
       <MainAppBar />
       <FarmDataGrid />
-      <BarChart />
+      <BarAndLineCharts />
     </div>
   );
 };

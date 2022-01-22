@@ -97,7 +97,7 @@ const setFarmData = (page = 1) => {
 const setFarmStatistics = (
   limit = 12,
   year = 2019,
-  metrictype = 'temperature' as MetricType,
+  metrictype = 'rainfall' as MetricType,
   farmname = 'Friman Metsola collective'
 ) => {
   return async (

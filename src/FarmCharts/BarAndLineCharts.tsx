@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Line, Bar } from 'react-chartjs-2';
+import { Chart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   BarElement,
@@ -18,6 +18,7 @@ import { MONTHS, getColorByMetric } from '../utils';
 
 ChartJS.register(
   BarElement,
+  LineElement,
   PointElement,
   LinearScale,
   CategoryScale,
@@ -26,7 +27,7 @@ ChartJS.register(
   Tooltip
 );
 
-const BarChart = () => {
+const BarAndLineCharts = () => {
   const dispatch = useAppDispatch();
   const { farmStats } = useSelector((state: RootState) => state);
 
@@ -40,12 +41,21 @@ const BarChart = () => {
     labels: MONTHS,
     datasets: [
       {
+        type: 'line' as const,
+        label: 'average',
+        fill: false,
+        data: farmStats.map((stats) => stats.average),
+        borderColor: colors.avg,
+      },
+      {
+        type: 'bar' as const,
         label: 'Min',
         data: farmStats.map((stats) => stats.min),
         backgroundColor: colors.min,
         borderColor: colors.min,
       },
       {
+        type: 'bar' as const,
         label: 'Max',
         data: farmStats.map((stats) => stats.max),
         backgroundColor: colors.max,
@@ -56,9 +66,9 @@ const BarChart = () => {
 
   return (
     <div style={{ height: 400, maxWidth: '50%', margin: 40 }}>
-      <Bar data={data} />
+      <Chart type="bar" data={data} />
     </div>
   );
 };
 
-export default BarChart;
+export default BarAndLineCharts;
