@@ -10,7 +10,7 @@ const baseUrl = 'https://farmify-api.herokuapp.com';
 
 let { farmname, metrictype, year }: QueryParameters = {};
 const statsDefaultMetric = MetricType.Temperature;
-const statsDefaultName = 'Friman Metsola collective';
+const statsDefaultName = 'Noora\'s farm';
 const statsDefaultYear = 2019;
 
 const setQueryParams = (name?: string, type?: MetricType, yr?: number) => {

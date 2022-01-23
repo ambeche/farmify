@@ -4,12 +4,12 @@ import '../FarmCharts/FarmCharts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../reducers/farmReducer';
 import { MONTHS, getColorByMetric } from '../utils';
-import {Box} from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 const BarAndLineCharts = () => {
   const { farmStats } = useSelector((state: RootState) => state);
 
-  const colors = getColorByMetric(farmStats.singleFarm[0]?.metrictype);
+  const colors = getColorByMetric(farmStats.combinedFarms[0]?.metrictype);
 
   const data = {
     labels: MONTHS,
@@ -39,7 +39,11 @@ const BarAndLineCharts = () => {
   };
 
   return (
-    <Box sx={{padding: 2}}>
+    <Box sx={{ padding: 2 }}>
+      <Box
+        component={Typography}
+        sx={{ marginBottom: 2, textAlign: 'center' }}
+      >{`Farm: ${farmStats.singleFarm[0]?.farmname} - '${farmStats.singleFarm[0]?.metrictype}' Statistics`}</Box>
       <Chart type="bar" data={data} />
     </Box>
   );

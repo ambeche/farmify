@@ -58,11 +58,11 @@ const FarmCharts = () => {
 
   return (
     <Box sx={{border: '0.5px solid #DCDCDC', borderRadius: 1} }>
-      <Box sx={{  maxWidth: '80%'} }>
-      <Box component={Button} endIcon={<ArrowRightAlt />}>select metric</Box>
+      <Box sx={{  display:'flex', flexDirection: 'row', justifyContent: 'center'} }>
+      <Box component={Button} endIcon={<ArrowRightAlt />}>select</Box>
         <Button endIcon={<Thermostat />}>temperature</Button>
-        <Button startIcon={<IconButton color='primary'>rainFall</IconButton>}></Button>
-        <Button startIcon={<IconButton color='primary'>pH</IconButton>}></Button>
+        <IconButton color='primary'>rainFall</IconButton>
+        <IconButton color='primary'>pH</IconButton>
       </Box>
       <Box sx={{ overflow: 'auto', maxHeight: 500 } }>
       <BarAndLineCharts />
