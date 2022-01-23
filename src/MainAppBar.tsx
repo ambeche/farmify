@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 const MainAppBar = () => {
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, marginBottom: '3%'}}>
       <AppBar position="sticky">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

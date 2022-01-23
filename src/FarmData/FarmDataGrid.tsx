@@ -34,9 +34,9 @@ const FarmDataGrid = () => {
   ];
 
   return (
-    <div style={{ height: 400, width: '100%', margin: 5 }}>
+    <div style={{ height: 500, width: '100%' }}>
       <div style={{ display: 'flex', height: '100%' }}>
-        <div style={{ flexGrow: 1 }}>
+        <div style={{ flexGrow: 1, marginTop: '10%', }}>
           <DataGrid
             rows={pages[currentPage]?.farmData || farmData}
             columns={columns}

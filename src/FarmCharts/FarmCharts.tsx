@@ -55,7 +55,7 @@ const FarmCharts = () => {
   }, []);
 
   return (
-    <div>
+  <div style={{overflow: 'auto', maxHeight: 600}}>
       <BarAndLineCharts />
       <MultiLineChartForAllFarms />
     </div>

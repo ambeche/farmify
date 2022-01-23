@@ -4,6 +4,7 @@ import '../FarmCharts/FarmCharts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../reducers/farmReducer';
 import { MONTHS, getColorByMetric } from '../utils';
+import {Box} from '@mui/material';
 
 const BarAndLineCharts = () => {
   const { farmStats } = useSelector((state: RootState) => state);
@@ -38,9 +39,9 @@ const BarAndLineCharts = () => {
   };
 
   return (
-    <div style={{ height: 400, maxWidth: '50%', margin: 40 }}>
+    <Box sx={{padding: 4}}>
       <Chart type="bar" data={data} />
-    </div>
+    </Box>
   );
 };
 
