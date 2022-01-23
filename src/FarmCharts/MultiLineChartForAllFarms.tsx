@@ -33,6 +33,17 @@ const MultiLineChartForAllFarms = () => {
   const data = {
     labels: MONTHS,
     datasets,
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: `${farmStats.singleFarm[0]?.farmname} Farm`,
+          align: 'center',
+          padding: 10
+      }
+
+      }
+    }
   };
 
   return (
