@@ -15,7 +15,7 @@ import {
 import { useSelector } from 'react-redux';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';
-import { Filter } from '@mui/icons-material';
+import { FilterAlt } from '@mui/icons-material';
 import AppMenu from '../globalComponents/AppMenu';
 
 const FarmDataGrid = () => {
@@ -53,9 +53,9 @@ const FarmDataGrid = () => {
   const DataGridToolbar = () => {
     return (
       <GridToolbarContainer>
-        <Box sx={{ padding: 1 }}>
+        <Box sx={{ paddingLeft: 1 }}>
           <Button
-            startIcon={<Filter />}
+            startIcon={<FilterAlt />}
             id="farm-picker"
             aria-controls={anchorEl ? 'app-menu' : undefined}
             aria-haspopup="true"
@@ -70,7 +70,14 @@ const FarmDataGrid = () => {
           anchorEl={anchorEl}
           onClose={handleFarmMenuClose}
           anchorId={'farm-picker'}
-          menuItems={["noora's farm", 'hellow there ', 'how are you']}
+          menuItems={[
+            "noora's farm",
+            'hellow there ',
+            'how are you',
+            "noora's farm",
+            'hellow there ',
+            'how are you',
+          ]}
         />
       </GridToolbarContainer>
     );
@@ -79,7 +86,7 @@ const FarmDataGrid = () => {
   return (
     <div style={{ height: 500, width: '100%' }}>
       <div style={{ display: 'flex', height: '100%' }}>
-        <div style={{ flexGrow: 1, marginTop: '10%' }}>
+        <div style={{ flexGrow: 1 }}>
           <DataGrid
             rows={pages[currentPage]?.farmData || farmData}
             columns={columns}

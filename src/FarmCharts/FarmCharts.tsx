@@ -17,6 +17,8 @@ import { useSelector } from 'react-redux';
 import { RootState, Action, setFarmStatistics } from '../reducers/farmReducer';
 import BarAndLineCharts from './BarAndLineCharts';
 import MultiLineChartForAllFarms from './MultiLineChartForAllFarms';
+import { Box, Button, IconButton, Typography } from '@mui/material';
+import { ArrowRightAlt, Thermostat } from '@mui/icons-material';
 
 export {
   Chart as ChartJS,
@@ -55,10 +57,18 @@ const FarmCharts = () => {
   }, []);
 
   return (
-  <div style={{overflow: 'auto', maxHeight: 600}}>
+    <Box sx={{border: '0.5px solid #DCDCDC', borderRadius: 1} }>
+      <Box sx={{  maxWidth: '80%'} }>
+      <Box component={Button} endIcon={<ArrowRightAlt />}>select metric</Box>
+        <Button endIcon={<Thermostat />}>temperature</Button>
+        <Button startIcon={<IconButton color='primary'>rainFall</IconButton>}></Button>
+        <Button startIcon={<IconButton color='primary'>pH</IconButton>}></Button>
+      </Box>
+      <Box sx={{ overflow: 'auto', maxHeight: 500 } }>
       <BarAndLineCharts />
       <MultiLineChartForAllFarms />
-    </div>
+      </Box>
+    </Box>
   );
 };
 

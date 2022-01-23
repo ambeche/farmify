@@ -22,6 +22,12 @@ const AppMenu = ({ anchorEl, menuItems, anchorId, onClose }: AppMenuProps) => {
         MenuListProps={{
           'aria-labelledby': anchorId,
         }}
+        PaperProps={{
+          style: {
+            maxHeight: 200,
+            width: '20ch',
+          },
+        }}
       >
         {menuItems.map((item) => (
           <MenuItem key={item} onClick={() => onClose()}>

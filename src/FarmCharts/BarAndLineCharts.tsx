@@ -39,7 +39,7 @@ const BarAndLineCharts = () => {
   };
 
   return (
-    <Box sx={{padding: 4}}>
+    <Box sx={{padding: 2}}>
       <Chart type="bar" data={data} />
     </Box>
   );
