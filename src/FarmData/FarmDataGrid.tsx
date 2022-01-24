@@ -46,8 +46,8 @@ const FarmDataGrid = () => {
   const handleFarmSelection = (selectedItem?: FarmOptions) => {
     if (selectedItem?.selected === false) {
       selectedItem.farmname !== 'All Farms'
-        ? farmService.setQueryParams(selectedItem.farmname)
-        : farmService.setQueryParams('');
+        ? farmService.setQueryParams({farmname: selectedItem.farmname})
+        : farmService.setQueryParams({});
       dispatch(resetFarmData() as Action);
       dispatch(
         updateFarmOptions({ ...selectedItem, selected: true }) as Action

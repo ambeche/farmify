@@ -1,3 +1,4 @@
+import { MetricType } from './types';
 export const MONTHS = [
   'Jan',
   'Feb',
@@ -31,8 +32,8 @@ export const CHART_COLORS = {
   },
 };
 
-export const getColorByMetric = (type: string) => {
-  if (type === 'temperature') return CHART_COLORS.temperature;
-  if (type === 'rainFall') return CHART_COLORS.rainfall;
+export const getColorByMetric = (type: MetricType) => {
+  if (type === MetricType.Temperature) return CHART_COLORS.temperature;
+  if (type === MetricType.Rainfall) return CHART_COLORS.rainfall;
   return CHART_COLORS.ph;
 };
