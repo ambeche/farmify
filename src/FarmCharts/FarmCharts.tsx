@@ -18,9 +18,11 @@ import { RootState, Action, setFarmStatistics } from '../reducers/farmReducer';
 import BarAndLineCharts from './BarAndLineCharts';
 import MultiLineChartForAllFarms from './MultiLineChartForAllFarms';
 import { Box, Button, IconButton } from '@mui/material';
-import { ArrowRightAlt, Thermostat } from '@mui/icons-material';
-import { MetricType } from '../types';
+import { ArrowDropDown, ArrowRightAlt, Thermostat } from '@mui/icons-material';
+import { MetricType, YearOptions } from '../types';
 import farmService from '../services/farmData';
+import AppMenu from '../globalComponents/AppMenu';
+import { YEAR_OPTIONS } from '../utils';
 
 export {
   Chart as ChartJS,
@@ -53,14 +55,37 @@ const FarmCharts = () => {
   const dispatch = useAppDispatch();
   const { farmData } = useSelector((state: RootState) => state);
   const [metric, setMetric] = useState<MetricType>(MetricType.Temperature);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [yearOptions, setOptions] = useState<YearOptions[]>(YEAR_OPTIONS);
+  const [selectedYear, setSelectedYear] = useState<number>(2019);
 
   useEffect(() => {
     dispatch(setFarmStatistics(false) as unknown as Action);
-  }, [farmData, metric]);
+  }, [farmData, metric, yearOptions]);
 
   useEffect(() => {
     dispatch(setFarmStatistics(true) as unknown as Action);
-  }, [metric]);
+  }, [metric, yearOptions]);
+
+  const setYearFiltering = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const closeYearMenu = () => {
+    setAnchorEl(null);
+  };
+  const handleYearSelection = (selectedItem?: YearOptions) => {
+    if (selectedItem?.selected === false) {
+      farmService.setQueryParams({ year: selectedItem.year });
+      const updatedOptions = yearOptions.map((item) =>
+        item.year === selectedItem.year
+          ? { ...item, selected: true }
+          : { ...item, selected: false }
+      );
+      setOptions(updatedOptions);
+      setSelectedYear(selectedItem.year);
+    }
+    closeYearMenu();
+  };
 
   const handleMetricTypeChange = (type: MetricType) => {
     farmService.setQueryParams({ metrictype: type });
@@ -100,10 +125,27 @@ const FarmCharts = () => {
         >
           pH
         </IconButton>
+        <Button
+          endIcon={<ArrowDropDown />}
+          id="farm-picker"
+          aria-controls={anchorEl ? 'app-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={anchorEl ? 'true' : undefined}
+          onClick={setYearFiltering}
+        >
+          year
+        </Button>
+        <AppMenu
+          anchorEl={anchorEl}
+          onClose={closeYearMenu}
+          handleSelection={handleYearSelection}
+          anchorId={'farm-picker'}
+          menuItems={yearOptions}
+        />
       </Box>
       <Box sx={{ overflow: 'auto', maxHeight: 500 }}>
-        <BarAndLineCharts />
-        <MultiLineChartForAllFarms />
+        <BarAndLineCharts selectedYear={selectedYear} />
+        <MultiLineChartForAllFarms selectedYear={selectedYear} />
       </Box>
     </Box>
   );

@@ -6,7 +6,9 @@ import { RootState } from '../reducers/farmReducer';
 import { MONTHS, getColorByMetric } from '../utils';
 import { Box, Typography } from '@mui/material';
 
-const BarAndLineCharts = () => {
+export type ChartProps = { selectedYear: number };
+
+const BarAndLineCharts = ({ selectedYear }: ChartProps) => {
   const { farmStats } = useSelector((state: RootState) => state);
 
   const colors = getColorByMetric(farmStats.combinedFarms[0]?.metrictype);
@@ -40,13 +42,13 @@ const BarAndLineCharts = () => {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Box
-        component={Typography}
-        sx={{ marginBottom: 2, textAlign: 'center' }}
-      >{`Farm: ${farmStats.singleFarm[0]?.farmname} - '${farmStats.singleFarm[0]?.metrictype}' Statistics`}</Box>
+      <Box component={Typography} sx={{ marginBottom: 2, textAlign: 'center' }}>
+        {farmStats.singleFarm[0]
+          ? `Farm: ${farmStats.singleFarm[0]?.farmname} - '${farmStats.singleFarm[0]?.metrictype}' Statistics in ${selectedYear}`
+          : 'No Data availabel for the set Year or Metric, change filters!'}
+      </Box>
       <Chart type="bar" data={data} />
     </Box>
   );
 };
-
 export default BarAndLineCharts;

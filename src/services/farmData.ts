@@ -20,8 +20,8 @@ const setQueryParams = ({
   year: yr,
 }: QueryParameters) => {
   farmname = name;
-  metrictype = type;
-  year = yr;
+  if(type )metrictype = type;
+  if(yr) year = yr;
 };
 const getFarms = async (): Promise<Farm[]> => {
   const res = await axios.get<Farm[]>(`${baseUrl}/farms`);
