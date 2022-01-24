@@ -1,17 +1,25 @@
 import * as React from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { FarmOptions } from '../types';
+import { Typography } from '@mui/material';
 
 interface AppMenuProps {
   anchorEl: null | HTMLElement;
-  menuItems: string[];
+  menuItems: string[] | FarmOptions[];
   anchorId: string;
-  onClose: (selectedItem?: string) => void;
+  handleSelection?: (selectedItem?: FarmOptions) => void;
+  onClose: (item?: string) => void;
 }
 
-const AppMenu = ({ anchorEl, menuItems, anchorId, onClose }: AppMenuProps) => {
+const AppMenu = ({
+  anchorEl,
+  menuItems,
+  anchorId,
+  onClose,
+  handleSelection,
+}: AppMenuProps) => {
   const open = Boolean(anchorEl);
-
   return (
     <div>
       <Menu
@@ -25,15 +33,28 @@ const AppMenu = ({ anchorEl, menuItems, anchorId, onClose }: AppMenuProps) => {
         PaperProps={{
           style: {
             maxHeight: 200,
-            width: '20ch',
           },
         }}
       >
-        {menuItems.map((item) => (
-          <MenuItem key={item} onClick={() => onClose()}>
-           { item}
-          </MenuItem>
-        ))}
+        {menuItems.map((item: string | FarmOptions) => {
+          if (typeof item === 'string')
+            return (
+              <MenuItem key={item} onClick={() => onClose(item)}>
+                {item}
+              </MenuItem>
+            );
+          return (
+            <MenuItem
+              key={item.farmname}
+              selected={item.selected}
+              onClick={handleSelection && (() => handleSelection(item))}
+            >
+              <Typography variant="inherit" noWrap>
+                {item.farmname}
+              </Typography>
+            </MenuItem>
+          );
+        })}
       </Menu>
     </div>
   );

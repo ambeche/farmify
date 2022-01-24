@@ -7,9 +7,8 @@ import App from './App';
 import { farmReducer } from './reducers/farmReducer';
 
 const store = createStore(farmReducer, applyMiddleware(thunk));
-export type AppDispatch = typeof store.dispatch
-export const useAppDispatch = () => useDispatch<AppDispatch>()
-
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 ReactDOM.render(
   <Provider store={store}>

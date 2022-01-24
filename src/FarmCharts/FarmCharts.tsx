@@ -17,7 +17,7 @@ import { useSelector } from 'react-redux';
 import { RootState, Action, setFarmStatistics } from '../reducers/farmReducer';
 import BarAndLineCharts from './BarAndLineCharts';
 import MultiLineChartForAllFarms from './MultiLineChartForAllFarms';
-import { Box, Button, IconButton, Typography } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
 import { ArrowRightAlt, Thermostat } from '@mui/icons-material';
 
 export {
@@ -49,24 +49,40 @@ export const Charts = ChartJS.register(
 
 const FarmCharts = () => {
   const dispatch = useAppDispatch();
-  const { farmStats } = useSelector((state: RootState) => state);
+  const { farmData } = useSelector((state: RootState) => state);
 
   useEffect(() => {
     dispatch(setFarmStatistics(false) as unknown as Action);
+  }, [farmData]);
+
+  useEffect(() => {
     dispatch(setFarmStatistics(true) as unknown as Action);
   }, []);
 
   return (
-    <Box sx={{border: '0.5px solid #DCDCDC', borderRadius: 1} }>
-      <Box sx={{  display:'flex', flexDirection: 'row', justifyContent: 'center'} }>
-      <Box component={Button} endIcon={<ArrowRightAlt />}>select</Box>
+    <Box sx={{ border: '0.5px solid #DCDCDC', borderRadius: 1 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          paddingTop: 0.5,
+        }}
+      >
+        <Box component={Button} endIcon={<ArrowRightAlt />}>
+          select
+        </Box>
         <Button endIcon={<Thermostat />}>temperature</Button>
-        <IconButton color='primary'>rainFall</IconButton>
-        <IconButton color='primary'>pH</IconButton>
+        <IconButton color="primary" size="small">
+          rainFall
+        </IconButton>
+        <IconButton color="primary" size="small">
+          pH
+        </IconButton>
       </Box>
-      <Box sx={{ overflow: 'auto', maxHeight: 500 } }>
-      <BarAndLineCharts />
-      <MultiLineChartForAllFarms />
+      <Box sx={{ overflow: 'auto', maxHeight: 500 }}>
+        <BarAndLineCharts />
+        <MultiLineChartForAllFarms />
       </Box>
     </Box>
   );

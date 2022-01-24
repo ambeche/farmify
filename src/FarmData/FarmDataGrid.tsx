@@ -11,37 +11,50 @@ import {
   setFarmData,
   setPage,
   Action,
+  updateFarmOptions,
+  resetFarmData,
 } from '../reducers/farmReducer';
+import farmService from '../services/farmData';
 import { useSelector } from 'react-redux';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';
 import { FilterAlt } from '@mui/icons-material';
 import AppMenu from '../globalComponents/AppMenu';
+import { FarmOptions } from '../types';
 
 const FarmDataGrid = () => {
   const dispatch = useAppDispatch();
-  const { currentPage, nextPage, pages, farmData } = useSelector(
+  const { currentPage, nextPage, pages, farmData, farmOptions } = useSelector(
     (state: RootState) => state
   );
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const setFarmFiltering = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleFarmMenuClose = (selectedItem?: string) => {
-    setAnchorEl(null);
-  };
 
   useEffect(() => {
     if (!pages.find((page) => page.index === currentPage)) {
       dispatch(setFarmData(nextPage) as unknown as Action);
     }
-  }, [nextPage, currentPage]);
+  }, [nextPage, currentPage, farmOptions]);
 
-  console.log(
-    'itExist',
-    Boolean(pages.find((page) => page.index === currentPage))
-  );
+  const setFarmFiltering = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const closeFarmMenu = () => {
+    setAnchorEl(null);
+  };
+  // sets server pagination for the records of the selected farm
+  const handleFarmSelection = (selectedItem?: FarmOptions) => {
+    if (selectedItem?.selected === false) {
+      selectedItem.farmname !== 'All Farms'
+        ? farmService.setQueryParams(selectedItem.farmname)
+        : farmService.setQueryParams('');
+      dispatch(resetFarmData() as Action);
+      dispatch(
+        updateFarmOptions({ ...selectedItem, selected: true }) as Action
+      );
+    }
+    closeFarmMenu();
+  };
 
   const columns: GridColDef[] = [
     { field: 'farmname', headerName: 'Farm Name' },
@@ -68,16 +81,10 @@ const FarmDataGrid = () => {
         <GridToolbarDensitySelector />
         <AppMenu
           anchorEl={anchorEl}
-          onClose={handleFarmMenuClose}
+          onClose={closeFarmMenu}
+          handleSelection={handleFarmSelection}
           anchorId={'farm-picker'}
-          menuItems={[
-            "noora's farm",
-            'hellow there ',
-            'how are you',
-            "noora's farm",
-            'hellow there ',
-            'how are you',
-          ]}
+          menuItems={farmOptions}
         />
       </GridToolbarContainer>
     );

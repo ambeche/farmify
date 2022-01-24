@@ -3,6 +3,7 @@ import {
   QueryParameters,
   FarmStatistics,
   MetricType,
+  Farm,
 } from './../types';
 import axios from 'axios';
 
@@ -10,7 +11,7 @@ const baseUrl = 'https://farmify-api.herokuapp.com';
 
 let { farmname, metrictype, year }: QueryParameters = {};
 const statsDefaultMetric = MetricType.Temperature;
-const statsDefaultName = 'Noora\'s farm';
+const statsDefaultName = "Noora's farm";
 const statsDefaultYear = 2019;
 
 const setQueryParams = (name?: string, type?: MetricType, yr?: number) => {
@@ -18,13 +19,18 @@ const setQueryParams = (name?: string, type?: MetricType, yr?: number) => {
   metrictype = type;
   year = yr;
 };
+const getFarms = async (): Promise<Farm[]> => {
+  const res = await axios.get<Farm[]>(`${baseUrl}/farms`);
+  console.log('data', res);
+  return res.data;
+};
+
 const getFarmData = async (page = 1): Promise<FarmRecord[]> => {
   const res = await axios.get<FarmRecord[]>(
     `${baseUrl}/farms/data?limit=101&page=${page}&farmname=${
       farmname || ''
     }&metrictype=${metrictype}&year=${year}`
   );
-  console.log('data', res);
 
   return res.data;
 };
@@ -56,5 +62,6 @@ export default {
   getFarmData,
   getFarmStatistics,
   getFarmStatisticsByName,
+  getFarms,
   setQueryParams,
 };
