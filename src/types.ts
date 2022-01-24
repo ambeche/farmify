@@ -11,6 +11,18 @@ export interface FarmRecord {
   value: number;
 }
 
+export interface Farm {
+  farmname: string;
+  owner: string;
+  farmdata: FarmRecord[];
+}
+
+type FarmWithoutData = Omit<Farm, 'farmdata'>;
+
+export interface FarmOptions extends FarmWithoutData {
+  selected: boolean;
+}
+
 type FarmRecordWithOmittedAttributes = Omit<FarmRecord, 'datetime' | 'value'>;
 
 export interface FarmStatistics extends FarmRecordWithOmittedAttributes {

@@ -4,6 +4,7 @@ import '../FarmCharts/FarmCharts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../reducers/farmReducer';
 import { MONTHS, CHART_COLORS } from '../utils';
+import { Box, Typography } from '@mui/material';
 
 const MultiLineChartForAllFarms = () => {
   const { farmStats } = useSelector((state: RootState) => state);
@@ -35,9 +36,20 @@ const MultiLineChartForAllFarms = () => {
   };
 
   return (
-    <div style={{ height: 400, maxWidth: '50%', margin: 40 }}>
+    <Box
+      sx={{
+        paddingLeft: 2,
+        paddingRight: 2,
+        marginTop: 8,
+        textAlign: 'center',
+      }}
+    >
+      <Box
+        component={Typography}
+        sx={{ marginBottom: 2 }}
+      >{`Monthly '${farmStats.combinedFarms[0]?.metrictype}' Averages Across Farms`}</Box>
       <Line data={data} />
-    </div>
+    </Box>
   );
 };
 

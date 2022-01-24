@@ -1,30 +1,60 @@
 import React, { useEffect } from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+} from '@mui/x-data-grid';
 import { useAppDispatch } from '..';
 import {
   RootState,
   setFarmData,
   setPage,
   Action,
+  updateFarmOptions,
+  resetFarmData,
 } from '../reducers/farmReducer';
+import farmService from '../services/farmData';
 import { useSelector } from 'react-redux';
+import { Box } from '@mui/system';
+import { Button } from '@mui/material';
+import { FilterAlt } from '@mui/icons-material';
+import AppMenu from '../globalComponents/AppMenu';
+import { FarmOptions } from '../types';
 
 const FarmDataGrid = () => {
   const dispatch = useAppDispatch();
-  const { currentPage, nextPage, pages, farmData } = useSelector(
+  const { currentPage, nextPage, pages, farmData, farmOptions, } = useSelector(
     (state: RootState) => state
   );
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   useEffect(() => {
     if (!pages.find((page) => page.index === currentPage)) {
       dispatch(setFarmData(nextPage) as unknown as Action);
     }
-  }, [nextPage, currentPage]);
+  }, [nextPage, currentPage, farmOptions]);
 
-  console.log(
-    'itExist',
-    Boolean(pages.find((page) => page.index === currentPage))
-  );
+  const setFarmFiltering = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const closeFarmMenu = () => {
+    setAnchorEl(null);
+  };
+  // sets server pagination for the records of the selected farm
+  const handleFarmSelection = (selectedItem?: FarmOptions) => {
+    if (selectedItem?.selected === false) {
+      selectedItem.farmname !== 'All Farms'
+        ? farmService.setQueryParams({farmname: selectedItem.farmname})
+        : farmService.setQueryParams({});
+      dispatch(resetFarmData() as Action);
+      dispatch(
+        updateFarmOptions({ ...selectedItem, selected: true }) as Action
+      );
+    }
+    closeFarmMenu();
+  };
 
   const columns: GridColDef[] = [
     { field: 'farmname', headerName: 'Farm Name' },
@@ -33,8 +63,35 @@ const FarmDataGrid = () => {
     { field: 'value', headerName: 'Value' },
   ];
 
+  const DataGridToolbar = () => {
+    return (
+      <GridToolbarContainer>
+        <Box sx={{ paddingLeft: 1 }}>
+          <Button
+            startIcon={<FilterAlt />}
+            id="farm-picker"
+            aria-controls={anchorEl ? 'app-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={anchorEl ? 'true' : undefined}
+            onClick={setFarmFiltering}
+          >
+            Select Farm
+          </Button>
+        </Box>
+        <GridToolbarDensitySelector />
+        <AppMenu
+          anchorEl={anchorEl}
+          onClose={closeFarmMenu}
+          handleSelection={handleFarmSelection}
+          anchorId={'farm-picker'}
+          menuItems={farmOptions}
+        />
+      </GridToolbarContainer>
+    );
+  };
+
   return (
-    <div style={{ height: 400, width: '100%', margin: 5 }}>
+    <div style={{ height: 500, width: '100%' }}>
       <div style={{ display: 'flex', height: '100%' }}>
         <div style={{ flexGrow: 1 }}>
           <DataGrid
@@ -48,6 +105,8 @@ const FarmDataGrid = () => {
             onPageChange={(newPage) =>
               dispatch(setPage(newPage) as unknown as Action)
             }
+            components={{ Toolbar: DataGridToolbar }}
+            density="compact"
           />
         </div>
       </div>
