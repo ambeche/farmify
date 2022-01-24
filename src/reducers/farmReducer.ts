@@ -108,6 +108,7 @@ export const farmReducer = (
             : { ...option, selected: false }
         ),
       };
+
     default:
       return state;
   }

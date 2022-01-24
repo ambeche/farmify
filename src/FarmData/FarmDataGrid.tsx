@@ -24,7 +24,7 @@ import { FarmOptions } from '../types';
 
 const FarmDataGrid = () => {
   const dispatch = useAppDispatch();
-  const { currentPage, nextPage, pages, farmData, farmOptions } = useSelector(
+  const { currentPage, nextPage, pages, farmData, farmOptions, } = useSelector(
     (state: RootState) => state
   );
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
