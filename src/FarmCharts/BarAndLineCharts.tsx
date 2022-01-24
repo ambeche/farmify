@@ -45,7 +45,7 @@ const BarAndLineCharts = ({ selectedYear }: ChartProps) => {
       <Box component={Typography} sx={{ marginBottom: 2, textAlign: 'center' }}>
         {farmStats.singleFarm[0]
           ? `Farm: ${farmStats.singleFarm[0]?.farmname} - '${farmStats.singleFarm[0]?.metrictype}' Statistics in ${selectedYear}`
-          : 'No Data availabel for the set Year or Metric, change filters!'}
+          : 'No Data available for the set Year or Metric, change filters!'}
       </Box>
       <Chart type="bar" data={data} />
     </Box>

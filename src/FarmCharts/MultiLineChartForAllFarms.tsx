@@ -18,7 +18,7 @@ const MultiLineChartForAllFarms = ({ selectedYear }: ChartProps) => {
     const subSet = statsSortedByFarmNames.slice(start, end);
     console.log('subset', subSet);
     return {
-      label: subSet[0]?.farmname,
+      label: subSet[0] ? subSet[0]?.farmname : '',
       data: subSet.map((stats) => stats.average),
       borderColor: color,
     };
@@ -48,7 +48,7 @@ const MultiLineChartForAllFarms = ({ selectedYear }: ChartProps) => {
       <Box component={Typography} sx={{ marginBottom: 2 }}>
         {farmStats.combinedFarms[0]
           ? `Monthly '${farmStats.combinedFarms[0]?.metrictype}' Averages Across Farms in ${selectedYear}`
-          : 'No Data availabel for the set Year or Metric, change filters!'}
+          : 'No Data available for the set Year or Metric, change filters!'}
       </Box>
       <Line data={data} />
     </Box>
