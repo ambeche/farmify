@@ -1,15 +1,17 @@
 import * as React from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { FarmOptions } from '../types';
-import { Typography } from '@mui/material';
+import { FarmOptions, YearOptions } from '../types';
+import { Divider, Typography } from '@mui/material';
+import { isYearOption } from '../utils';
 
 interface AppMenuProps {
   anchorEl: null | HTMLElement;
-  menuItems: string[] | FarmOptions[];
+  menuItems: string[] | FarmOptions[] | YearOptions[];
   anchorId: string;
-  handleSelection?: (selectedItem?: FarmOptions) => void;
-  onClose: (item?: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleSelection?: (selectedItem?: any) => void;
+  onClose: () => void;
 }
 
 const AppMenu = ({
@@ -20,6 +22,31 @@ const AppMenu = ({
   handleSelection,
 }: AppMenuProps) => {
   const open = Boolean(anchorEl);
+
+  const setMenuItems = (
+    rendered: string | number,
+    selected: boolean,
+    item: string | FarmOptions | YearOptions
+  ) => {
+    return (
+      <>
+        <MenuItem
+          key={rendered}
+          selected={selected}
+          onClick={
+            (handleSelection && (() => handleSelection(item))) ||
+            (() => onClose())
+          }
+        >
+          <Typography variant="inherit" noWrap>
+            {rendered}
+          </Typography>
+        </MenuItem>
+        <Divider />
+      </>
+    );
+  };
+
   return (
     <div>
       <Menu
@@ -36,24 +63,13 @@ const AppMenu = ({
           },
         }}
       >
-        {menuItems.map((item: string | FarmOptions) => {
-          if (typeof item === 'string')
-            return (
-              <MenuItem key={item} onClick={() => onClose(item)}>
-                {item}
-              </MenuItem>
-            );
-          return (
-            <MenuItem
-              key={item.farmname}
-              selected={item.selected}
-              onClick={handleSelection && (() => handleSelection(item))}
-            >
-              <Typography variant="inherit" noWrap>
-                {item.farmname}
-              </Typography>
-            </MenuItem>
-          );
+        {menuItems.map((item) => {
+          if (typeof item === 'string') return setMenuItems(item, true, item);
+
+          if (isYearOption(item))
+            return setMenuItems(item.year, item.selected, item);
+
+          return setMenuItems(item.farmname, item.selected, item);
         })}
       </Menu>
     </div>

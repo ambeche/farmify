@@ -5,8 +5,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../reducers/farmReducer';
 import { MONTHS, CHART_COLORS } from '../utils';
 import { Box, Typography } from '@mui/material';
+import { ChartProps } from './BarAndLineCharts';
 
-const MultiLineChartForAllFarms = () => {
+const MultiLineChartForAllFarms = ({ selectedYear }: ChartProps) => {
   const { farmStats } = useSelector((state: RootState) => state);
 
   // sort and extract stats from different farms
@@ -44,10 +45,11 @@ const MultiLineChartForAllFarms = () => {
         textAlign: 'center',
       }}
     >
-      <Box
-        component={Typography}
-        sx={{ marginBottom: 2 }}
-      >{`Monthly '${farmStats.combinedFarms[0]?.metrictype}' Averages Across Farms`}</Box>
+      <Box component={Typography} sx={{ marginBottom: 2 }}>
+        {farmStats.combinedFarms[0]
+          ? `Monthly '${farmStats.combinedFarms[0]?.metrictype}' Averages Across Farms in ${selectedYear}`
+          : 'No Data availabel for the set Year or Metric, change filters!'}
+      </Box>
       <Line data={data} />
     </Box>
   );

@@ -23,6 +23,11 @@ export interface FarmOptions extends FarmWithoutData {
   selected: boolean;
 }
 
+export type YearOptions = {
+  year: number;
+  selected: boolean;
+};
+
 type FarmRecordWithOmittedAttributes = Omit<FarmRecord, 'datetime' | 'value'>;
 
 export interface FarmStatistics extends FarmRecordWithOmittedAttributes {

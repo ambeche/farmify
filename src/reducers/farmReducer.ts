@@ -108,7 +108,6 @@ export const farmReducer = (
             : { ...option, selected: false }
         ),
       };
-
     default:
       return state;
   }
@@ -142,7 +141,6 @@ const setFarmOptions = () => {
         },
         ...options,
       ];
-      console.log('options', payload);
       dispatch({
         type: 'SET_FARM_OPTIONS',
         payload,
@@ -161,7 +159,6 @@ const setFarmData = (page = 1) => {
     try {
       const farmRecords = await farmData.getFarmData(page);
       const payload = { index: page, farmData: farmRecords };
-
       dispatch({
         type: 'SET_FARM_DATA',
         payload,
@@ -184,7 +181,6 @@ const setFarmStatistics = (isCombined: boolean, page?: number) => {
           type: 'SET_COMBINED_FARMS_STATISTICS',
           payload,
         });
-        console.log('combined', payload);
         return;
       }
       const payload = await farmData.getFarmStatisticsByName();
@@ -192,7 +188,6 @@ const setFarmStatistics = (isCombined: boolean, page?: number) => {
         type: 'SET_SINGLE_FARM_STATISTICS',
         payload,
       });
-      console.log('single', payload);
     } catch (error) {
       if (error instanceof Error)
         console.log('StatsDispatchError', error.message);
