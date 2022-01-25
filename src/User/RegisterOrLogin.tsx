@@ -5,6 +5,8 @@ import UserForm from './UserForm';
 import { CHART_COLORS } from '../utils';
 import { Button } from '@mui/material';
 import { UserCredentialsInput } from '../types';
+import { useSelector } from 'react-redux';
+import { RootState } from '..';
 
 export interface RegisterOrLoginProps {
   redirectBtnLabel: string;
@@ -16,6 +18,7 @@ const RegisterOrLogin = ({
   redirectBtnLabel,
   handleSubmission,
 }: RegisterOrLoginProps) => {
+  const { user } = useSelector((state: RootState) => state.user);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -28,7 +31,6 @@ const RegisterOrLogin = ({
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    //console.log(username, password);
     handleSubmission({ username, password });
     setPassword('');
     setUsername('');

@@ -68,7 +68,7 @@ const AppMenu = ({
               <SetMenuItems
                 key={item}
                 rendered={item}
-                selected={true}
+                selected={false}
                 item={item}
               />
             );

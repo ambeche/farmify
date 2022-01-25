@@ -28,19 +28,25 @@ const userReducer = (state = initialUserState, action: Action) => {
 };
 
 const logoutUser = () => {
-  return {
-    type: 'LOGOUT_USER',
+  return async (dispatch: ThunkDispatch<UserState, void, AnyAction>) => {
+    window.localStorage.removeItem('currentUser');
+    dispatch({
+      type: 'LOGOUT_USER',
+    });
   };
 };
 
 const setCurrentUser = (currentUser: UserCredentials) => {
   return {
-    type: 'LOGOUT_USER',
+    type: 'LOGIN_USER',
     payload: currentUser,
   };
 };
 
-const loginUser = ({ username, password }: UserCredentialsInput) => {
+const loginUser = (
+  { username, password }: UserCredentialsInput,
+  onSuccess?: () => void
+) => {
   return async (
     dispatch: ThunkDispatch<UserState, void, AnyAction>
   ): Promise<void> => {
@@ -51,6 +57,7 @@ const loginUser = ({ username, password }: UserCredentialsInput) => {
         window.localStorage.setItem('currentUser', JSON.stringify(currentUser));
         farmService.setToken(currentUser); //sets Authorization header bearer token
         dispatch(setCurrentUser(currentUser));
+        if (onSuccess) onSuccess();
       }
     } catch (error) {
       if (error instanceof Error) console.log('login error', error.message);
@@ -59,14 +66,17 @@ const loginUser = ({ username, password }: UserCredentialsInput) => {
 };
 
 //Authenticate user upon a successful registration
-const setNewUser = ({ username, password }: UserCredentialsInput) => {
+const setNewUser = (
+  { username, password }: UserCredentialsInput,
+  onSuccess?: () => void
+) => {
   return async (
     dispatch: ThunkDispatch<UserState, void, AnyAction>
   ): Promise<void> => {
     try {
       const user = await userService.addUser({ username, password });
       if (user.username)
-        dispatch(loginUser({ username: user.username, password }));
+        dispatch(loginUser({ username: user.username, password }, onSuccess));
       console.log('new user', user);
     } catch (error) {
       if (error instanceof Error)
