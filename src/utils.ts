@@ -52,3 +52,7 @@ export const getColorByMetric = (type: MetricType) => {
 export const isYearOption = (param: any): param is YearOptions => {
   return typeof param.year === 'number' && typeof param.selected === 'boolean';
 };
+
+export const assertNever = (arg: never): never => {
+  throw new Error(`Unexpected value type: ${JSON.stringify(arg)}`);
+};

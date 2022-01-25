@@ -58,6 +58,7 @@ const setNewUser = ({ username, password }: UserCredentialsInput) => {
       const user = await userService.addUser({ username, password });
       if (user.username)
         dispatch(loginUser({ username: user.username, password }));
+        console.log('new user', user)
     } catch (error) {
       if (error instanceof Error)
         console.log('farmdataDispatchError', error.message);

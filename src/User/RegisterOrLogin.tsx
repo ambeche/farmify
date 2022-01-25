@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Box } from '@mui/system';
 import UserForm from './UserForm';
 import { CHART_COLORS } from '../utils';
 import { Button } from '@mui/material';
+import { UserCredentialsInput } from '../types';
 
-interface RegisterOrLoginProps {
+export interface RegisterOrLoginProps {
   redirectBtnLabel: string;
-  submissionBtnLabel: string;
-  handleSubmission: () => void;
+  submissionType: string;
+  handleSubmission: (credentials: UserCredentialsInput) => void;
 }
-const RegisterOrLogin = ({ submissionBtnLabel, redirectBtnLabel, handleSubmission }: RegisterOrLoginProps) => {
+const RegisterOrLogin = ({
+  submissionType,
+  redirectBtnLabel,
+  handleSubmission,
+}: RegisterOrLoginProps) => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -22,8 +28,10 @@ const RegisterOrLogin = ({ submissionBtnLabel, redirectBtnLabel, handleSubmissio
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(username, password);
-    handleSubmission();
+    //console.log(username, password);
+    handleSubmission({ username, password });
+    setPassword('');
+    setUsername('');
   };
 
   return (
@@ -47,12 +55,18 @@ const RegisterOrLogin = ({ submissionBtnLabel, redirectBtnLabel, handleSubmissio
         <UserForm
           username={username}
           password={password}
-          btnLabel={submissionBtnLabel}
+          btnLabel={submissionType}
           handlePasswordChange={handlePasswordChange}
           handleUsernameChange={handleUsernameChange}
           onSubmit={onSubmit}
         />
-        <Button color="secondary"> {redirectBtnLabel} </Button>
+        <Button
+          component={RouterLink}
+          to={`/${redirectBtnLabel}`}
+          color="secondary"
+        >
+          {redirectBtnLabel}
+        </Button>
       </Box>
     </Box>
   );

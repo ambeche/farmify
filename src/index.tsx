@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider, useDispatch } from 'react-redux';
 import thunk from 'redux-thunk';
@@ -19,7 +20,9 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </React.StrictMode>
   </Provider>,
 
