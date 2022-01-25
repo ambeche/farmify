@@ -60,13 +60,24 @@ const RegisterOrLogin = ({
           handleUsernameChange={handleUsernameChange}
           onSubmit={onSubmit}
         />
-        <Button
-          component={RouterLink}
-          to={`/${redirectBtnLabel}`}
-          color="secondary"
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}
         >
-          {redirectBtnLabel}
-        </Button>
+          <Button component={RouterLink} to="/">
+            cancel
+          </Button>
+          <Button
+            component={RouterLink}
+            to={`/${redirectBtnLabel}`}
+            color="secondary"
+          >
+            {redirectBtnLabel}
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

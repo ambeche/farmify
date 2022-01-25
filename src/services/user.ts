@@ -13,7 +13,6 @@ const addUser = async (
     `${BASE_URL}/users`,
     credentials
   );
-
   return res.data;
 };
 
@@ -24,7 +23,6 @@ const login = async (
     `${BASE_URL}/login`,
     credentials
   );
-
   return res.data;
 };
 

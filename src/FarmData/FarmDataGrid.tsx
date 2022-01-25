@@ -13,7 +13,7 @@ import {
   updateFarmOptions,
   resetFarmData,
 } from '../reducers/farmReducer';
-import farmService from '../services/farmData';
+import farmService from '../services/farm';
 import { useSelector } from 'react-redux';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';

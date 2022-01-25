@@ -20,7 +20,7 @@ import MultiLineChartForAllFarms from './MultiLineChartForAllFarms';
 import { Box, Button, IconButton } from '@mui/material';
 import { ArrowDropDown, ArrowRightAlt, Thermostat } from '@mui/icons-material';
 import { MetricType, YearOptions } from '../types';
-import farmService from '../services/farmData';
+import farmService from '../services/farm';
 import AppMenu from '../globalComponents/AppMenu';
 import { YEAR_OPTIONS } from '../utils';
 

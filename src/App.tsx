@@ -6,12 +6,22 @@ import { useAppDispatch } from '.';
 import { Action, setFarmOptions } from './reducers/farmReducer';
 import Home from './Pages/Home';
 import Authentication from './Pages/Authentication';
+import { setCurrentUser } from './reducers/userReducer';
+import { UserCredentials } from './types';
+import farmService from './services/farm';
 
 const App = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(setFarmOptions() as unknown as Action);
-  });
+    const isLoggedIn = window.localStorage.getItem('currentUser');
+    if (isLoggedIn) {
+      // sets credentials from storage if it exits.
+      const credentials = JSON.parse(isLoggedIn) as UserCredentials;
+      dispatch(setCurrentUser(credentials) as Action);
+      farmService.setToken(credentials);
+    }
+  }, []);
 
   return (
     <Box>
