@@ -16,7 +16,6 @@ const MultiLineChartForAllFarms = ({ selectedYear }: ChartProps) => {
   );
   const extractSingleFarmStat = (start: number, end: number, color: string) => {
     const subSet = statsSortedByFarmNames.slice(start, end);
-    console.log('subset', subSet);
     return {
       label: subSet[0] ? subSet[0]?.farmname : '',
       data: subSet.map((stats) => stats.average),
@@ -30,7 +29,6 @@ const MultiLineChartForAllFarms = ({ selectedYear }: ChartProps) => {
     extractSingleFarmStat(24, 36, CHART_COLORS.temperature.min),
     extractSingleFarmStat(36, 49, CHART_COLORS.temperature.max),
   ];
-  console.log('dataset', datasets);
   const data = {
     labels: MONTHS,
     datasets,

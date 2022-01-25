@@ -20,12 +20,11 @@ const setQueryParams = ({
   year: yr,
 }: QueryParameters) => {
   farmname = name;
-  if(type )metrictype = type;
-  if(yr) year = yr;
+  if (type) metrictype = type;
+  if (yr) year = yr;
 };
 const getFarms = async (): Promise<Farm[]> => {
   const res = await axios.get<Farm[]>(`${baseUrl}/farms`);
-  console.log('data', res);
   return res.data;
 };
 
@@ -33,7 +32,6 @@ const getFarmData = async (page = 1): Promise<FarmRecord[]> => {
   const res = await axios.get<FarmRecord[]>(
     `${baseUrl}/farms/data?limit=101&page=${page}&farmname=${farmname || ''}`
   );
-
   return res.data;
 };
 

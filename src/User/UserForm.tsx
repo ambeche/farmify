@@ -7,7 +7,7 @@ interface UserFormProps {
   btnLabel: string;
   handleUsernameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
 const UserForm = ({
@@ -19,19 +19,12 @@ const UserForm = ({
   handleUsernameChange,
 }: UserFormProps) => {
   return (
-    <Box
-      component="form"
-      onSubmit={onSubmit}
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
+    <Box component="form" onSubmit={onSubmit} noValidate autoComplete="off">
       <TextField
         id="username"
         label="username"
         margin="dense"
+        required
         type="text"
         value={username}
         onChange={handleUsernameChange}
@@ -40,6 +33,7 @@ const UserForm = ({
         id="user-password"
         label="password"
         margin="dense"
+        required
         type="password"
         value={password}
         onChange={handlePasswordChange}
@@ -48,3 +42,5 @@ const UserForm = ({
     </Box>
   );
 };
+
+export default UserForm;
