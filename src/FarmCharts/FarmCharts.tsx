@@ -14,7 +14,7 @@ import {
 } from 'chart.js';
 import { useAppDispatch } from '..';
 import { useSelector } from 'react-redux';
-import { RootState, Action, setFarmStatistics } from '../reducers/farmReducer';
+import { FarmState, Action, setFarmStatistics } from '../reducers/farmReducer';
 import BarAndLineCharts from './BarAndLineCharts';
 import MultiLineChartForAllFarms from './MultiLineChartForAllFarms';
 import { Box, Button, IconButton } from '@mui/material';
@@ -53,7 +53,7 @@ export const Charts = ChartJS.register(
 
 const FarmCharts = () => {
   const dispatch = useAppDispatch();
-  const { farmData } = useSelector((state: RootState) => state);
+  const { farmData } = useSelector((state: FarmState) => state);
   const [metric, setMetric] = useState<MetricType>(MetricType.Temperature);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [yearOptions, setOptions] = useState<YearOptions[]>(YEAR_OPTIONS);

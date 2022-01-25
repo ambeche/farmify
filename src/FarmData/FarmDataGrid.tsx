@@ -7,7 +7,7 @@ import {
 } from '@mui/x-data-grid';
 import { useAppDispatch } from '..';
 import {
-  RootState,
+  FarmState,
   setFarmData,
   setPage,
   Action,
@@ -25,7 +25,7 @@ import { FarmOptions } from '../types';
 const FarmDataGrid = () => {
   const dispatch = useAppDispatch();
   const { currentPage, nextPage, pages, farmData, farmOptions, } = useSelector(
-    (state: RootState) => state
+    (state: FarmState) => state
   );
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 

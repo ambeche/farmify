@@ -48,7 +48,7 @@ export interface QueryParameters {
   farmname?: string;
 }
 
-interface UserCredentialsBase {
+export interface UserCredentialsBase {
   username: string;
 }
 

@@ -2,13 +2,13 @@ import React from 'react';
 import { Line } from 'react-chartjs-2';
 import '../FarmCharts/FarmCharts';
 import { useSelector } from 'react-redux';
-import { RootState } from '../reducers/farmReducer';
+import { FarmState } from '../reducers/farmReducer';
 import { MONTHS, CHART_COLORS } from '../utils';
 import { Box, Typography } from '@mui/material';
 import { ChartProps } from './BarAndLineCharts';
 
 const MultiLineChartForAllFarms = ({ selectedYear }: ChartProps) => {
-  const { farmStats } = useSelector((state: RootState) => state);
+  const { farmStats } = useSelector((state: FarmState) => state);
 
   // sort and extract stats from different farms
   const statsSortedByFarmNames = farmStats.combinedFarms.sort((a, b) =>

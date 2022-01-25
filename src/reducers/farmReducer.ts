@@ -36,7 +36,7 @@ export type Action =
       type: 'RESET_FARM_DATA';
     };
 
-export type RootState = {
+export type FarmState = {
   farmData: FarmRecord[];
   pages: Page[];
   nextPage: number;
@@ -48,7 +48,7 @@ export type RootState = {
   farmOptions: FarmOptions[];
 };
 
-const initialState: RootState = {
+const initialState: FarmState = {
   farmData: [],
   pages: [],
   nextPage: 0,
@@ -63,7 +63,7 @@ const initialState: RootState = {
 export const farmReducer = (
   state = initialState,
   action: Action
-): RootState => {
+): FarmState => {
   switch (action.type) {
     case 'SET_FARM_DATA':
       return {
@@ -122,7 +122,7 @@ const setPage = (index: number) => {
 
 const setFarmOptions = () => {
   return async (
-    dispatch: ThunkDispatch<RootState, void, AnyAction>
+    dispatch: ThunkDispatch<FarmState, void, AnyAction>
   ): Promise<void> => {
     try {
       const farms = await farmData.getFarms();
@@ -154,7 +154,7 @@ const setFarmOptions = () => {
 
 const setFarmData = (page = 1) => {
   return async (
-    dispatch: ThunkDispatch<RootState, void, AnyAction>
+    dispatch: ThunkDispatch<FarmState, void, AnyAction>
   ): Promise<void> => {
     try {
       const farmRecords = await farmData.getFarmData(page);
@@ -172,7 +172,7 @@ const setFarmData = (page = 1) => {
 
 const setFarmStatistics = (isCombined: boolean, page?: number) => {
   return async (
-    dispatch: ThunkDispatch<RootState, void, AnyAction>
+    dispatch: ThunkDispatch<FarmState, void, AnyAction>
   ): Promise<void> => {
     try {
       if (isCombined) {
