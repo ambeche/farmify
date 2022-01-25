@@ -5,7 +5,7 @@ import MainAppBar from './MainAppBar';
 import { Box, Grid } from '@mui/material';
 import { useAppDispatch } from '.';
 import { Action, setFarmOptions } from './reducers/farmReducer';
-import AddUser from './User/AddUser';
+import RegisterOrLogin from './User/RegisterOrLogin';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +25,16 @@ const App = () => {
           </Grid>
         </Grid>
       </Box>
-      <AddUser />
+      <RegisterOrLogin
+        redirectBtnLabel="login"
+        submissionBtnLabel="register"
+        handleSubmission={() => console.log('yes yes')}
+      />
+      <RegisterOrLogin
+        redirectBtnLabel="register"
+        submissionBtnLabel="login"
+        handleSubmission={() => console.log('no no')}
+      />
     </Box>
   );
 };

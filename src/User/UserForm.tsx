@@ -19,26 +19,38 @@ const UserForm = ({
   handleUsernameChange,
 }: UserFormProps) => {
   return (
-    <Box component="form" onSubmit={onSubmit} noValidate autoComplete="off">
-      <TextField
-        id="username"
-        label="username"
-        margin="dense"
-        required
-        type="text"
-        value={username}
-        onChange={handleUsernameChange}
-      />
-      <TextField
-        id="user-password"
-        label="password"
-        margin="dense"
-        required
-        type="password"
-        value={password}
-        onChange={handlePasswordChange}
-      />
-      <Button type="submit">{btnLabel} </Button>
+    <Box
+      sx={{
+        '& > :not(style)': { m: 1, width: '25ch' },
+      }}
+      component="form"
+      onSubmit={onSubmit}
+      noValidate
+      autoComplete="off"
+    >
+      <div>
+        <TextField
+          id="username"
+          label="username"
+          margin="dense"
+          required
+          type="text"
+          value={username}
+          onChange={handleUsernameChange}
+        />
+      </div>
+      <div>
+        <TextField
+          id="user-password"
+          label="password"
+          margin="dense"
+          required
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+      </div>
+      <Button type="submit" variant='outlined'>{btnLabel} </Button>
     </Box>
   );
 };

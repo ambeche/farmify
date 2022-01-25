@@ -47,3 +47,16 @@ export interface QueryParameters {
   metrictype?: MetricType;
   farmname?: string;
 }
+
+interface UserCredentialsBase {
+  username: string;
+}
+
+export interface UserCredentials extends UserCredentialsBase{
+  token: string;
+}
+export interface UserCredentialsInput extends UserCredentialsBase{
+  password: string;
+}
+
+
