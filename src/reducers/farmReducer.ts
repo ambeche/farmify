@@ -1,7 +1,12 @@
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import farmData from '../services/farmData';
-import { FarmRecord, FarmStatistics, FarmOptions } from './../types';
+import {
+  FarmRecord,
+  FarmStatistics,
+  FarmOptions,
+  UserCredentials,
+} from './../types';
 
 export interface Page {
   index: number;
@@ -34,6 +39,13 @@ export type Action =
     }
   | {
       type: 'RESET_FARM_DATA';
+    }
+  | {
+      type: 'LOGIN_USER';
+      payload: UserCredentials;
+    }
+  | {
+      type: 'LOGOUT_USER';
     };
 
 export type FarmState = {

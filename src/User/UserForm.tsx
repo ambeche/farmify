@@ -30,7 +30,7 @@ const UserForm = ({
     >
       <div>
         <TextField
-          id="username"
+          id={`username-${btnLabel}`}
           label="username"
           margin="dense"
           required
@@ -41,7 +41,7 @@ const UserForm = ({
       </div>
       <div>
         <TextField
-          id="user-password"
+          id={`user-password-${btnLabel}`}
           label="password"
           margin="dense"
           required

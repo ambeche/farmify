@@ -2,14 +2,14 @@ import React from 'react';
 import { Chart } from 'react-chartjs-2';
 import '../FarmCharts/FarmCharts';
 import { useSelector } from 'react-redux';
-import { FarmState } from '../reducers/farmReducer';
 import { MONTHS, getColorByMetric } from '../utils';
 import { Box, Typography } from '@mui/material';
+import {RootState} from '..';
 
 export type ChartProps = { selectedYear: number };
 
 const BarAndLineCharts = ({ selectedYear }: ChartProps) => {
-  const { farmStats } = useSelector((state: FarmState) => state);
+  const { farmStats } = useSelector((state: RootState) => state.farm);
 
   const colors = getColorByMetric(farmStats.combinedFarms[0]?.metrictype);
 
