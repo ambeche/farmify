@@ -13,7 +13,9 @@ import AppMenu from './globalComponents/AppMenu';
 import { logoutUser } from './reducers/userReducer';
 import { Action } from './reducers/farmReducer';
 
-const MainAppBar = () => {
+type MainAppBarProps = { openFarmForm: () => void };
+
+const MainAppBar = ({ openFarmForm }: MainAppBarProps) => {
   const dispatch = useAppDispatch();
   const { user } = useSelector((state: RootState) => state.user);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -44,7 +46,7 @@ const MainAppBar = () => {
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 1 }}>
-            <Button color="inherit" component={RouterLink} to="/login">
+            <Button color="inherit" onClick={openFarmForm}>
               create Farm
             </Button>
           </Box>
