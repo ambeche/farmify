@@ -33,8 +33,11 @@ const getFarms = async (): Promise<Farm[]> => {
   return res.data;
 };
 
-const createFarm = async (): Promise<FarmRecord[]> => {
+const createFarm = async (file: File): Promise<FarmRecord[]> => {
+  const formData = new FormData();
+  formData.append('farmdata', file);
   const res = await axios.post<FarmRecord[]>(`${BASE_URL}/farms`, {
+    data: formData,
     headers: { Authorization: token, 'content-type': 'multipart/form-data' },
   });
   return res.data;
