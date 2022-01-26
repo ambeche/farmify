@@ -48,7 +48,6 @@ const RegisterOrLogin = ({
           border: `solid ${CHART_COLORS.rainfall.max}`,
           borderRadius: 2,
           padding: '2% 2%',
-          maxWidth: '20%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',

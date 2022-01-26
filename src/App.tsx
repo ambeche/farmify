@@ -9,6 +9,7 @@ import Authentication from './Pages/Authentication';
 import { setCurrentUser } from './reducers/userReducer';
 import { UserCredentials } from './types';
 import farmService from './services/farm';
+import FileUploadForm from './FarmData/FileUploadForm';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -37,6 +38,7 @@ const App = () => {
           element={<Authentication submissionType="register" />}
         />
       </Routes>
+      <FileUploadForm />
     </Box>
   );
 };
