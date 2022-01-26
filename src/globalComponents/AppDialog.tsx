@@ -4,9 +4,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import {CHART_COLORS} from '../utils';
 
 export interface AppDialogProps {
-  id: string;
+  id?: string;
   children?: React.ReactNode;
   open: boolean;
   title: string;
@@ -21,7 +22,7 @@ const AppDialogTitle = ({
   ...other
 }: AppDialogTitleProps) => {
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+    <DialogTitle sx={{ m: 0, p: 3, pt: 6 }} {...other}>
       {children}
       {onClose ? (
         <IconButton
@@ -31,7 +32,7 @@ const AppDialogTitle = ({
             position: 'absolute',
             right: 8,
             top: 8,
-            color: (theme) => theme.palette.grey[500],
+            color: CHART_COLORS.ph.max,
           }}
         >
           <CloseIcon />
