@@ -1,18 +1,23 @@
+import { UserCredentials } from './../types';
 import {
   FarmRecord,
   QueryParameters,
   FarmStatistics,
   MetricType,
   Farm,
-} from './../types';
+} from '../types';
 import axios from 'axios';
-
-const baseUrl = 'https://farmify-api.herokuapp.com';
+import { BASE_URL } from '../utils';
 
 let { farmname, metrictype, year }: QueryParameters = {};
 const statsDefaultMetric = MetricType.Temperature;
 const statsDefaultName = "Noora's farm";
 const statsDefaultYear = 2019;
+
+let token: string;
+
+const setToken = (newToken: UserCredentials) =>
+  (token = `bearer ${newToken.token}`);
 
 const setQueryParams = ({
   farmname: name,
@@ -20,27 +25,35 @@ const setQueryParams = ({
   year: yr,
 }: QueryParameters) => {
   farmname = name;
-  if(type )metrictype = type;
-  if(yr) year = yr;
+  if (type) metrictype = type;
+  if (yr) year = yr;
 };
 const getFarms = async (): Promise<Farm[]> => {
-  const res = await axios.get<Farm[]>(`${baseUrl}/farms`);
-  console.log('data', res);
+  const res = await axios.get<Farm[]>(`${BASE_URL}/farms`);
+  return res.data;
+};
+
+const createFarm = async (file: File): Promise<FarmRecord[]> => {
+  const formData = new FormData();
+  formData.append('farmdata', file);
+  const res = await axios.post<FarmRecord[]>(`${BASE_URL}/farms`, {
+    data: formData,
+    headers: { Authorization: token, 'content-type': 'multipart/form-data' },
+  });
   return res.data;
 };
 
 const getFarmData = async (page = 1): Promise<FarmRecord[]> => {
   const res = await axios.get<FarmRecord[]>(
-    `${baseUrl}/farms/data?limit=101&page=${page}&farmname=${farmname || ''}`
+    `${BASE_URL}/farms/data?limit=101&page=${page}&farmname=${farmname || ''}`
   );
-
   return res.data;
 };
 
 //statistics for a single farm
 const getFarmStatisticsByName = async (): Promise<FarmStatistics[]> => {
   const res = await axios.get<FarmStatistics[]>(
-    `${baseUrl}/farms/statistics?farmname=${
+    `${BASE_URL}/farms/statistics?farmname=${
       farmname || statsDefaultName
     }&metrictype=${metrictype || statsDefaultMetric}&year=${
       year || statsDefaultYear
@@ -53,7 +66,7 @@ const getFarmStatisticsByName = async (): Promise<FarmStatistics[]> => {
 // next set of farms are fetched using the page parameter
 const getFarmStatistics = async (page = 1): Promise<FarmStatistics[]> => {
   const res = await axios.get<FarmStatistics[]>(
-    `${baseUrl}/farms/statistics?&metrictype=${
+    `${BASE_URL}/farms/statistics?&metrictype=${
       metrictype || statsDefaultMetric
     }&year=${year || statsDefaultYear}&limit=48&page=${page}`
   );
@@ -65,5 +78,7 @@ export default {
   getFarmStatistics,
   getFarmStatisticsByName,
   getFarms,
+  createFarm,
   setQueryParams,
+  setToken,
 };

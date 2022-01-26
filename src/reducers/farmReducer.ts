@@ -1,7 +1,12 @@
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
-import farmData from '../services/farmData';
-import { FarmRecord, FarmStatistics, FarmOptions } from './../types';
+import farmService from '../services/farm';
+import {
+  FarmRecord,
+  FarmStatistics,
+  FarmOptions,
+  UserCredentials,
+} from './../types';
 
 export interface Page {
   index: number;
@@ -34,9 +39,16 @@ export type Action =
     }
   | {
       type: 'RESET_FARM_DATA';
+    }
+  | {
+      type: 'LOGIN_USER';
+      payload: UserCredentials;
+    }
+  | {
+      type: 'LOGOUT_USER';
     };
 
-export type RootState = {
+export type FarmState = {
   farmData: FarmRecord[];
   pages: Page[];
   nextPage: number;
@@ -48,7 +60,7 @@ export type RootState = {
   farmOptions: FarmOptions[];
 };
 
-const initialState: RootState = {
+const initialState: FarmState = {
   farmData: [],
   pages: [],
   nextPage: 0,
@@ -63,7 +75,7 @@ const initialState: RootState = {
 export const farmReducer = (
   state = initialState,
   action: Action
-): RootState => {
+): FarmState => {
   switch (action.type) {
     case 'SET_FARM_DATA':
       return {
@@ -122,10 +134,10 @@ const setPage = (index: number) => {
 
 const setFarmOptions = () => {
   return async (
-    dispatch: ThunkDispatch<RootState, void, AnyAction>
+    dispatch: ThunkDispatch<FarmState, void, AnyAction>
   ): Promise<void> => {
     try {
-      const farms = await farmData.getFarms();
+      const farms = await farmService.getFarms();
       const options: FarmOptions[] = farms.map((farm) => ({
         farmname: farm.farmname,
         owner: farm.owner,
@@ -154,10 +166,10 @@ const setFarmOptions = () => {
 
 const setFarmData = (page = 1) => {
   return async (
-    dispatch: ThunkDispatch<RootState, void, AnyAction>
+    dispatch: ThunkDispatch<FarmState, void, AnyAction>
   ): Promise<void> => {
     try {
-      const farmRecords = await farmData.getFarmData(page);
+      const farmRecords = await farmService.getFarmData(page);
       const payload = { index: page, farmData: farmRecords };
       dispatch({
         type: 'SET_FARM_DATA',
@@ -172,18 +184,18 @@ const setFarmData = (page = 1) => {
 
 const setFarmStatistics = (isCombined: boolean, page?: number) => {
   return async (
-    dispatch: ThunkDispatch<RootState, void, AnyAction>
+    dispatch: ThunkDispatch<FarmState, void, AnyAction>
   ): Promise<void> => {
     try {
       if (isCombined) {
-        const payload = await farmData.getFarmStatistics(page);
+        const payload = await farmService.getFarmStatistics(page);
         dispatch({
           type: 'SET_COMBINED_FARMS_STATISTICS',
           payload,
         });
         return;
       }
-      const payload = await farmData.getFarmStatisticsByName();
+      const payload = await farmService.getFarmStatisticsByName();
       dispatch({
         type: 'SET_SINGLE_FARM_STATISTICS',
         payload,

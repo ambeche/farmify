@@ -2,13 +2,13 @@ import React from 'react';
 import { Line } from 'react-chartjs-2';
 import '../FarmCharts/FarmCharts';
 import { useSelector } from 'react-redux';
-import { RootState } from '../reducers/farmReducer';
 import { MONTHS, CHART_COLORS } from '../utils';
 import { Box, Typography } from '@mui/material';
 import { ChartProps } from './BarAndLineCharts';
+import {RootState} from '..';
 
 const MultiLineChartForAllFarms = ({ selectedYear }: ChartProps) => {
-  const { farmStats } = useSelector((state: RootState) => state);
+  const { farmStats } = useSelector((state: RootState) => state.farm);
 
   // sort and extract stats from different farms
   const statsSortedByFarmNames = farmStats.combinedFarms.sort((a, b) =>
@@ -16,9 +16,8 @@ const MultiLineChartForAllFarms = ({ selectedYear }: ChartProps) => {
   );
   const extractSingleFarmStat = (start: number, end: number, color: string) => {
     const subSet = statsSortedByFarmNames.slice(start, end);
-    console.log('subset', subSet);
     return {
-      label: subSet[0]?.farmname,
+      label: subSet[0] ? subSet[0]?.farmname : '',
       data: subSet.map((stats) => stats.average),
       borderColor: color,
     };
@@ -30,7 +29,6 @@ const MultiLineChartForAllFarms = ({ selectedYear }: ChartProps) => {
     extractSingleFarmStat(24, 36, CHART_COLORS.temperature.min),
     extractSingleFarmStat(36, 49, CHART_COLORS.temperature.max),
   ];
-  console.log('dataset', datasets);
   const data = {
     labels: MONTHS,
     datasets,
@@ -48,7 +46,7 @@ const MultiLineChartForAllFarms = ({ selectedYear }: ChartProps) => {
       <Box component={Typography} sx={{ marginBottom: 2 }}>
         {farmStats.combinedFarms[0]
           ? `Monthly '${farmStats.combinedFarms[0]?.metrictype}' Averages Across Farms in ${selectedYear}`
-          : 'No Data availabel for the set Year or Metric, change filters!'}
+          : 'No Data available for the set Year or Metric, change filters!'}
       </Box>
       <Line data={data} />
     </Box>

@@ -5,27 +5,26 @@ import {
   GridToolbarContainer,
   GridToolbarDensitySelector,
 } from '@mui/x-data-grid';
-import { useAppDispatch } from '..';
+import { RootState, useAppDispatch } from '..';
 import {
-  RootState,
   setFarmData,
   setPage,
   Action,
   updateFarmOptions,
   resetFarmData,
 } from '../reducers/farmReducer';
-import farmService from '../services/farmData';
+import farmService from '../services/farm';
 import { useSelector } from 'react-redux';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';
 import { FilterAlt } from '@mui/icons-material';
 import AppMenu from '../globalComponents/AppMenu';
 import { FarmOptions } from '../types';
-
+//currentPage, nextPage, pages, farmData, farmOptions,
 const FarmDataGrid = () => {
   const dispatch = useAppDispatch();
-  const { currentPage, nextPage, pages, farmData, farmOptions, } = useSelector(
-    (state: RootState) => state
+  const { currentPage, nextPage, pages, farmData, farmOptions } = useSelector(
+    (state: RootState) => state.farm
   );
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -46,7 +45,7 @@ const FarmDataGrid = () => {
   const handleFarmSelection = (selectedItem?: FarmOptions) => {
     if (selectedItem?.selected === false) {
       selectedItem.farmname !== 'All Farms'
-        ? farmService.setQueryParams({farmname: selectedItem.farmname})
+        ? farmService.setQueryParams({ farmname: selectedItem.farmname })
         : farmService.setQueryParams({});
       dispatch(resetFarmData() as Action);
       dispatch(

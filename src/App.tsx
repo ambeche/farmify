@@ -1,29 +1,44 @@
 import React, { useEffect } from 'react';
-import FarmCharts from './FarmCharts/FarmCharts';
-import FarmDataGrid from './FarmData/FarmDataGrid';
+import { Routes, Route } from 'react-router-dom';
 import MainAppBar from './MainAppBar';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import { useAppDispatch } from '.';
 import { Action, setFarmOptions } from './reducers/farmReducer';
+import Home from './Pages/Home';
+import Authentication from './Pages/Authentication';
+import { setCurrentUser } from './reducers/userReducer';
+import { UserCredentials } from './types';
+import farmService from './services/farm';
+import FileUploadForm from './FarmData/FileUploadForm';
 
 const App = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(setFarmOptions() as unknown as Action);
-  });
+    const isLoggedIn = window.localStorage.getItem('currentUser');
+    if (isLoggedIn) {
+      // sets credentials from storage if it exits.
+      const credentials = JSON.parse(isLoggedIn) as UserCredentials;
+      dispatch(setCurrentUser(credentials) as Action);
+      farmService.setToken(credentials);
+    }
+  }, []);
+
   return (
     <Box>
       <MainAppBar />
-      <Box>
-        <Grid container spacing={2} justifyContent="space-around">
-          <Grid item sm={12} md={6}>
-            <FarmDataGrid />
-          </Grid>
-          <Grid item sm={12} md={6}>
-            <FarmCharts />
-          </Grid>
-        </Grid>
-      </Box>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="login"
+          element={<Authentication submissionType="login" />}
+        />
+        <Route
+          path="register"
+          element={<Authentication submissionType="register" />}
+        />
+      </Routes>
+      <FileUploadForm />
     </Box>
   );
 };

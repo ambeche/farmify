@@ -2,14 +2,14 @@ import React from 'react';
 import { Chart } from 'react-chartjs-2';
 import '../FarmCharts/FarmCharts';
 import { useSelector } from 'react-redux';
-import { RootState } from '../reducers/farmReducer';
 import { MONTHS, getColorByMetric } from '../utils';
 import { Box, Typography } from '@mui/material';
+import {RootState} from '..';
 
 export type ChartProps = { selectedYear: number };
 
 const BarAndLineCharts = ({ selectedYear }: ChartProps) => {
-  const { farmStats } = useSelector((state: RootState) => state);
+  const { farmStats } = useSelector((state: RootState) => state.farm);
 
   const colors = getColorByMetric(farmStats.combinedFarms[0]?.metrictype);
 
@@ -45,7 +45,7 @@ const BarAndLineCharts = ({ selectedYear }: ChartProps) => {
       <Box component={Typography} sx={{ marginBottom: 2, textAlign: 'center' }}>
         {farmStats.singleFarm[0]
           ? `Farm: ${farmStats.singleFarm[0]?.farmname} - '${farmStats.singleFarm[0]?.metrictype}' Statistics in ${selectedYear}`
-          : 'No Data availabel for the set Year or Metric, change filters!'}
+          : 'No Data available for the set Year or Metric, change filters!'}
       </Box>
       <Chart type="bar" data={data} />
     </Box>

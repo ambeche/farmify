@@ -2,7 +2,7 @@ import * as React from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { FarmOptions, YearOptions } from '../types';
-import { Divider, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { isYearOption } from '../utils';
 
 interface AppMenuProps {
@@ -12,6 +12,11 @@ interface AppMenuProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleSelection?: (selectedItem?: any) => void;
   onClose: () => void;
+}
+interface SetMenuProps {
+  rendered: string | number;
+  selected: boolean;
+  item: string | FarmOptions | YearOptions;
 }
 
 const AppMenu = ({
@@ -23,15 +28,10 @@ const AppMenu = ({
 }: AppMenuProps) => {
   const open = Boolean(anchorEl);
 
-  const setMenuItems = (
-    rendered: string | number,
-    selected: boolean,
-    item: string | FarmOptions | YearOptions
-  ) => {
+  const SetMenuItems = ({ rendered, selected, item }: SetMenuProps) => {
     return (
       <>
         <MenuItem
-          key={rendered}
           selected={selected}
           onClick={
             (handleSelection && (() => handleSelection(item))) ||
@@ -42,7 +42,6 @@ const AppMenu = ({
             {rendered}
           </Typography>
         </MenuItem>
-        <Divider />
       </>
     );
   };
@@ -64,12 +63,34 @@ const AppMenu = ({
         }}
       >
         {menuItems.map((item) => {
-          if (typeof item === 'string') return setMenuItems(item, true, item);
+          if (typeof item === 'string')
+            return (
+              <SetMenuItems
+                key={item}
+                rendered={item}
+                selected={false}
+                item={item}
+              />
+            );
 
           if (isYearOption(item))
-            return setMenuItems(item.year, item.selected, item);
+            return (
+              <SetMenuItems
+                key={item.year}
+                rendered={item.year}
+                selected={item.selected}
+                item={item}
+              />
+            );
 
-          return setMenuItems(item.farmname, item.selected, item);
+          return (
+            <SetMenuItems
+              key={item.farmname}
+              rendered={item.farmname}
+              selected={item.selected}
+              item={item}
+            />
+          );
         })}
       </Menu>
     </div>
