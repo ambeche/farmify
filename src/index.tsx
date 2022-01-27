@@ -7,10 +7,12 @@ import thunk from 'redux-thunk';
 import App from './App';
 import { farmReducer } from './reducers/farmReducer';
 import userReducer from './reducers/userReducer';
+import notificationReducer from './reducers/notificationReducer';
 
 const reducers = combineReducers({
   farm: farmReducer,
   user: userReducer,
+  notice: notificationReducer,
 });
 export type RootState = ReturnType<typeof reducers>;
 const store = createStore(reducers, applyMiddleware(thunk));

@@ -52,6 +52,13 @@ export type Action =
   | {
       type: 'UPDATE_USER';
       payload: Pick<Farm, 'farmname'>;
+    }
+  | {
+      type: 'SET_NOTICE';
+      payload: Notification;
+    }
+  | {
+      type: 'RESET_NOTICE';
     };
 
 export type FarmState = {
@@ -262,7 +269,7 @@ const addDataToExistingFarm = (file: File) => {
   ): Promise<void> => {
     try {
       const addedFarmRecords = await farmService.createFarm(file);
-       
+
       console.log('added', addedFarmRecords);
     } catch (error) {
       if (error instanceof Error)
