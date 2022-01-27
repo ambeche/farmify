@@ -24,7 +24,7 @@ const setQueryParams = ({
   metrictype: type,
   year: yr,
 }: QueryParameters) => {
-  farmname = name;
+  if (name) farmname = name;
   if (type) metrictype = type;
   if (yr) year = yr;
 };
@@ -34,10 +34,9 @@ const getFarms = async (): Promise<Farm[]> => {
 };
 
 const createFarm = async (file: File): Promise<FarmRecord[]> => {
-  const formData = new FormData();
-  formData.append('farmdata', file);
-  const res = await axios.post<FarmRecord[]>(`${BASE_URL}/farms`, {
-    data: formData,
+  const data = new FormData();
+  data.append('farmdata', file);
+  const res = await axios.post<FarmRecord[]>(`${BASE_URL}/farms`, data, {
     headers: { Authorization: token, 'content-type': 'multipart/form-data' },
   });
   return res.data;

@@ -1,27 +1,40 @@
 import { Action } from './farmReducer';
-import { UserCredentials, UserCredentialsInput } from './../types';
+import { Farm, User, UserCredentialsInput } from './../types';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import userService from '../services/user';
 import farmService from '../services/farm';
 
 export type UserState = {
-  user: UserCredentials;
+  user: User;
 };
 
 const initialUserState: UserState = {
   user: {
     token: '',
-    username: '',
+    username: '', 
+    farms: [],
   },
+ 
 };
 
 const userReducer = (state = initialUserState, action: Action) => {
   switch (action.type) {
     case 'LOGIN_USER':
-      return { ...state, user: action.payload };
+      return {
+        ...state, user: action.payload
+        
+      };
+    case 'UPDATE_USER':
+      return {
+        ...state,
+        user: {...state.user, farms:[...state.user.farms, action.payload]}
+      };
     case 'LOGOUT_USER':
-      return { ...state, user: { token: '', username: '' } };
+      return {
+        ...state,
+        user: { token: '', username: '', farms: [{farmname: ''}] },
+      };
     default:
       return state;
   }
@@ -36,10 +49,16 @@ const logoutUser = () => {
   };
 };
 
-const setCurrentUser = (currentUser: UserCredentials) => {
+const setCurrentUser = (currentUser: User) => {
   return {
     type: 'LOGIN_USER',
     payload: currentUser,
+  };
+};
+const updateCurrentUserOwnFarms = (farmname: Pick<Farm, 'farmname'>) => {
+  return {
+    type: 'UPDATE_USER',
+    payload: farmname,
   };
 };
 
@@ -51,12 +70,14 @@ const loginUser = (
     dispatch: ThunkDispatch<UserState, void, AnyAction>
   ): Promise<void> => {
     try {
-      const currentUser = await userService.login({ username, password });
-      if (currentUser) {
+      const user: User = await userService.login({ username, password });
+      console.log('user', user)
+      if (user) {
+        dispatch(setCurrentUser(user));
         // persists user's token to local storage
-        window.localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        farmService.setToken(currentUser); //sets Authorization header bearer token
-        dispatch(setCurrentUser(currentUser));
+        window.localStorage.setItem('currentUser', JSON.stringify(user));
+        farmService.setToken(user); //sets Authorization header bearer token
+        console.log('own', user);
         if (onSuccess) onSuccess();
       }
     } catch (error) {
@@ -91,4 +112,5 @@ export {
   loginUser,
   logoutUser,
   setCurrentUser,
+  updateCurrentUserOwnFarms,
 };

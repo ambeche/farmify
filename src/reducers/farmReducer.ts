@@ -5,8 +5,10 @@ import {
   FarmRecord,
   FarmStatistics,
   FarmOptions,
-  UserCredentials,
+  User,
+  Farm,
 } from './../types';
+import { updateCurrentUserOwnFarms } from './userReducer';
 
 export interface Page {
   index: number;
@@ -42,10 +44,14 @@ export type Action =
     }
   | {
       type: 'LOGIN_USER';
-      payload: UserCredentials;
+      payload: User;
     }
   | {
       type: 'LOGOUT_USER';
+    }
+  | {
+      type: 'UPDATE_USER';
+      payload: Pick<Farm, 'farmname'>;
     };
 
 export type FarmState = {
@@ -131,6 +137,23 @@ const setPage = (index: number) => {
     payload: index,
   };
 };
+const updateFarmOptions = (option: FarmOptions) => {
+  return {
+    type: 'UPDATE_FARM_OPTIONS',
+    payload: option,
+  };
+};
+const addNewFarmOption = (option: FarmOptions) => {
+  return {
+    type: 'ADD_FARM_OPTIONS',
+    payload: option,
+  };
+};
+const resetFarmData = () => {
+  return {
+    type: 'RESET_FARM_DATA',
+  };
+};
 
 const setFarmOptions = () => {
   return async (
@@ -143,7 +166,7 @@ const setFarmOptions = () => {
         owner: farm.owner,
         selected: false,
       }));
-
+      console.log('farmoptoins', farms, options);
       // defined menu options for selecting farms
       const payload = [
         {
@@ -207,16 +230,29 @@ const setFarmStatistics = (isCombined: boolean, page?: number) => {
   };
 };
 
-const updateFarmOptions = (option: FarmOptions) => {
-  return {
-    type: 'UPDATE_FARM_OPTIONS',
-    payload: option,
-  };
-};
+// adds data to a new farm and updates farm options
+// for filtering on the data grid interface
+const addFarm = (file: File, owner: string) => {
+  return async (
+    dispatch: ThunkDispatch<FarmState, void, AnyAction>
+  ): Promise<void> => {
+    try {
+      const addedFarmRecords = await farmService.createFarm(file);
+      const payload = {
+        farmname: addedFarmRecords[0].farmname,
+        owner,
+        selected: false,
+      };
 
-const resetFarmData = () => {
-  return {
-    type: 'RESET_FARM_DATA',
+      dispatch(
+        updateCurrentUserOwnFarms({ farmname: addedFarmRecords[0].farmname })
+      );
+      dispatch(addNewFarmOption(payload));
+      console.log('added', addedFarmRecords);
+    } catch (error) {
+      if (error instanceof Error)
+        console.log('create farm error', error.message);
+    }
   };
 };
 
@@ -224,6 +260,7 @@ export {
   setFarmData,
   setPage,
   setFarmStatistics,
+  addFarm,
   setFarmOptions,
   updateFarmOptions,
   resetFarmData,

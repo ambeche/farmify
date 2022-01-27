@@ -3,15 +3,16 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import MainAppBar from './MainAppBar';
 import { Box } from '@mui/material';
 import { RootState, useAppDispatch } from '.';
-import { Action, setFarmOptions } from './reducers/farmReducer';
+import { Action, addFarm, setFarmOptions } from './reducers/farmReducer';
 import Home from './Pages/Home';
 import Authentication from './Pages/Authentication';
 import { setCurrentUser } from './reducers/userReducer';
-import { UserCredentials } from './types';
+import { User } from './types';
 import farmService from './services/farm';
 import FileUploadForm from './FarmData/FileUploadForm';
 import AppDialog from './globalComponents/AppDialog';
 import { useSelector } from 'react-redux';
+import Profile from './Pages/Profile';
 
 const App = () => {
   const navigate = useNavigate();
@@ -25,9 +26,9 @@ const App = () => {
     const isLoggedIn = window.localStorage.getItem('currentUser');
     if (isLoggedIn) {
       // sets credentials from storage if it exits.
-      const credentials = JSON.parse(isLoggedIn) as UserCredentials;
-      dispatch(setCurrentUser(credentials) as Action);
-      farmService.setToken(credentials);
+      const user = JSON.parse(isLoggedIn) as User;
+      dispatch(setCurrentUser(user) as Action);
+      farmService.setToken(user);
     }
   }, []);
 
@@ -39,6 +40,9 @@ const App = () => {
     if (currentUser?.token) return setFarmCreationDialog(true);
     navigate('/login');
   };
+  const handleFileUpload = (file: File) => {
+    dispatch(addFarm(file, currentUser.username) as unknown as Action)
+  }
 
   return (
     <Box>
@@ -53,13 +57,14 @@ const App = () => {
           path="register"
           element={<Authentication submissionType="register" />}
         />
+        <Route path="profile" element={<Profile />} />
       </Routes>
       <AppDialog
         open={isFarmCreationDialogOpened}
         onClose={closeFarmCreationDialog}
         title="CSV File Upload for Farm Creation"
       >
-        <FileUploadForm />
+        <FileUploadForm handleFileUpload={handleFileUpload}/>
       </AppDialog>
     </Box>
   );

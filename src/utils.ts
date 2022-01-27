@@ -1,6 +1,6 @@
 import { MetricType, YearOptions } from './types';
 
-export const BASE_URL = 'https://farmify-api.herokuapp.com'
+export const BASE_URL = '' //https://farmify-api.herokuapp.com'
 export const MONTHS = [
   'Jan',
   'Feb',
