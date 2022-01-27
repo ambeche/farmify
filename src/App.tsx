@@ -13,6 +13,7 @@ import FileUploadForm from './FarmData/FileUploadForm';
 import AppDialog from './globalComponents/AppDialog';
 import { useSelector } from 'react-redux';
 import Profile from './Pages/Profile';
+import UserNotification from './globalComponents/UserNotification';
 
 const App = () => {
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ const App = () => {
           label="create farm"
         />
       </AppDialog>
+      <UserNotification />
     </Box>
   );
 };

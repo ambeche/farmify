@@ -1,20 +1,23 @@
+import {AlertColor} from '@mui/material';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from './farmReducer';
 
 export type Notification = {
   message: string;
-  code: string;
+  code?: AlertColor;
+  open: boolean;
 };
 const initialState: Notification = {
   message: '',
-  code: '',
+  code: 'success',
+  open: false,
 };
 
 const notificationReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case 'SET_NOTICE':
-      return { ...state, ...action.payload };
+      return action.payload;
     case 'RESET_NOTICE':
       return { ...initialState };
     default:
@@ -30,7 +33,6 @@ export const notifyUser = (notice: Notification) => {
       type: 'SET_NOTICE',
       payload: notice,
     });
-
     await new Promise(() => {
       setTimeout(() => {
         dispatch({
@@ -40,5 +42,4 @@ export const notifyUser = (notice: Notification) => {
     });
   };
 };
-
 export default notificationReducer;

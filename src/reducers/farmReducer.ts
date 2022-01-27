@@ -9,6 +9,7 @@ import {
   Farm,
 } from './../types';
 import { updateCurrentUserOwnFarms } from './userReducer';
+import {Notification} from './notificationReducer';
 
 export interface Page {
   index: number;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Navigate } from 'react-router-dom';
 import { Box } from '@mui/system';
 import UserForm from './UserForm';
 import { CHART_COLORS } from '../utils';
@@ -18,10 +18,11 @@ const RegisterOrLogin = ({
   redirectBtnLabel,
   handleSubmission,
 }: RegisterOrLoginProps) => {
-  const { user } = useSelector((state: RootState) => state.user);
+  const { message } = useSelector((state: RootState) => state.notice);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  console.log('message', message);
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
@@ -34,6 +35,8 @@ const RegisterOrLogin = ({
     handleSubmission({ username, password });
     setPassword('');
     setUsername('');
+
+    console.log('message', message);
   };
 
   return (
@@ -61,6 +64,7 @@ const RegisterOrLogin = ({
           handleUsernameChange={handleUsernameChange}
           onSubmit={onSubmit}
         />
+        {message === 'success' && <Navigate to="/" replace={true} />}
         <Box
           sx={{
             display: 'flex',
