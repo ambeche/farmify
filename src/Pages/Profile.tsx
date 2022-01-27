@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { CHART_COLORS } from '../utils';
 import AppDialog from '../globalComponents/AppDialog';
 import FileUploadForm from '../FarmData/FileUploadForm';
+import { Action, addDataToExistingFarm } from '../reducers/farmReducer';
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -22,17 +23,13 @@ const Profile = () => {
   };
 
   const openDialog = () => {
-    if (token) return setDialog(true);
-    navigate('/login');
+    if (token) setDialog(true);
   };
   const handleFileUpload = (file: File) => {
-    //dispatch(addFarm(file, currentUser.username) as unknown as Action)
+    dispatch(addDataToExistingFarm(file) as unknown as Action);
   };
 
   const showFarmDetails = () => {
-    navigate('/');
-  };
-  const updateFarm = () => {
     navigate('/');
   };
 
@@ -53,7 +50,7 @@ const Profile = () => {
             key={farm?.farmname}
             farmname={farm?.farmname}
             fetchFarm={showFarmDetails}
-            updateFarm={updateFarm}
+            updateFarm={openDialog}
           />
         ))}
       </>

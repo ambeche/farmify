@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Box, Button, FormHelperText, Typography } from '@mui/material';
 import { CHART_COLORS } from '../utils';
 import { UploadFile } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '..';
 
 interface FileUploadFormProps {
   handleFileUpload: (file: File) => void;
@@ -10,7 +12,9 @@ interface FileUploadFormProps {
 }
 
 const FileUploadForm = ({ handleFileUpload, label }: FileUploadFormProps) => {
-  const navigate = useNavigate();
+  const { message, code, open } = useSelector(
+    (state: RootState) => state.notice
+  );
   const [csvFile, setFile] = useState<File>();
   const [helperText, setHelperText] = useState<string>('No file choosen');
   const [error, setError] = useState<boolean>(false);
@@ -38,11 +42,21 @@ const FileUploadForm = ({ handleFileUpload, label }: FileUploadFormProps) => {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('yes iam good', csvFile);
-
+    // file upload and server-side validation
+    // and error handling
     if (csvFile) handleFileUpload(csvFile);
-    navigate('/profile');
+    if (code === 'error') {
+      setError(true);
+      setHelperText(message);
+      return;
+    }
+    // clean up form on success
+    setError(false);
+    setHelperText('');
+    setFile(undefined);
+    console.log('file ok', csvFile);
   };
+
   return (
     <Box
       sx={{
@@ -50,6 +64,7 @@ const FileUploadForm = ({ handleFileUpload, label }: FileUploadFormProps) => {
         justifyContent: 'center',
       }}
     >
+      {open && code === 'success' && <Navigate to="/" replace={true} />}
       <Box
         sx={{
           display: 'flex',

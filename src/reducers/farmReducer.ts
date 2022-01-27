@@ -9,7 +9,8 @@ import {
   Farm,
 } from './../types';
 import { updateCurrentUserOwnFarms } from './userReducer';
-import {Notification} from './notificationReducer';
+import { Notification, notifyUser } from './notificationReducer';
+import { AxiosError } from 'axios';
 
 export interface Page {
   index: number;
@@ -269,12 +270,14 @@ const addDataToExistingFarm = (file: File) => {
     dispatch: ThunkDispatch<FarmState, void, AnyAction>
   ): Promise<void> => {
     try {
-      const addedFarmRecords = await farmService.createFarm(file);
+      const addedRecords = await farmService.updateFarmWithData(file);
+      const message = `${addedRecords.length} Records Successfully added to farm '${addedRecords[0].farmname}'`;
 
-      console.log('added', addedFarmRecords);
+      dispatch(notifyUser({ message, code: 'success', open: true }));
     } catch (error) {
-      if (error instanceof Error)
-        console.log('create farm error', error.message);
+      if (error as AxiosError) {
+        //console.log('update farm error', error.message);
+      }
     }
   };
 };

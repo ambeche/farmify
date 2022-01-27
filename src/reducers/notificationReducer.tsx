@@ -38,7 +38,7 @@ export const notifyUser = (notice: Notification) => {
         dispatch({
           type: 'RESET_NOTICE',
         });
-      }, 5000);
+      }, 6000);
     });
   };
 };

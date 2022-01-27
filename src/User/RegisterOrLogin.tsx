@@ -18,11 +18,10 @@ const RegisterOrLogin = ({
   redirectBtnLabel,
   handleSubmission,
 }: RegisterOrLoginProps) => {
-  const { message } = useSelector((state: RootState) => state.notice);
+  const { message, code } = useSelector((state: RootState) => state.notice);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  console.log('message', message);
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
@@ -35,8 +34,6 @@ const RegisterOrLogin = ({
     handleSubmission({ username, password });
     setPassword('');
     setUsername('');
-
-    console.log('message', message);
   };
 
   return (
@@ -64,7 +61,9 @@ const RegisterOrLogin = ({
           handleUsernameChange={handleUsernameChange}
           onSubmit={onSubmit}
         />
-        {message === 'success' && <Navigate to="/" replace={true} />}
+        {message === 'login' && code === 'success' && (
+          <Navigate to="/" replace={true} />
+        )}
         <Box
           sx={{
             display: 'flex',
