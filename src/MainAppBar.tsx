@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -19,6 +19,7 @@ const MainAppBar = ({ openFarmForm }: MainAppBarProps) => {
   const dispatch = useAppDispatch();
   const { user } = useSelector((state: RootState) => state.user);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
 
   const setUserMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,8 +27,12 @@ const MainAppBar = ({ openFarmForm }: MainAppBarProps) => {
   const closeUserMenu = () => {
     setAnchorEl(null);
   };
-  const handleLogout = (item: string) => {
-    if (item === 'Log out') dispatch(logoutUser() as unknown as Action);
+  const handleLogout = (item?: string) => {
+    if (item === 'Log out') {
+      dispatch(logoutUser() as unknown as Action);
+      navigate('/');
+    }
+    if (item === 'Profile') navigate('/profile');
     closeUserMenu();
   };
 

@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Box, Button, FormHelperText, Typography } from '@mui/material';
 import { CHART_COLORS } from '../utils';
+import { UploadFile } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 interface FileUploadFormProps {
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleFileUpload: (file: File) => void;
 }
 
-const FileUploadForm = () => {
+const FileUploadForm = ({ handleFileUpload }: FileUploadFormProps) => {
+  const navigate = useNavigate();
   const [csvFile, setFile] = useState<File>();
   const [helperText, setHelperText] = useState<string>('No file choosen');
   const [error, setError] = useState<boolean>(false);
@@ -21,6 +24,7 @@ const FileUploadForm = () => {
       console.log('file', file.name);
       if (extension !== '.csv') {
         setError(true);
+        setFile(undefined);
         return setHelperText(
           `Invalid file type "${file.name}", only '.csv' file type allowed!`
         );
@@ -33,6 +37,10 @@ const FileUploadForm = () => {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log('yes iam good', csvFile);
+
+    if (csvFile) handleFileUpload(csvFile);
+    navigate('/profile');
   };
   return (
     <Box
@@ -47,7 +55,9 @@ const FileUploadForm = () => {
           justifyContent: 'center',
           border: `solid ${CHART_COLORS.rainfall.max}`,
           borderRadius: 2,
-          padding: '2% 2%',
+          pl: ' 7%',
+          pt: '2%',
+          pb: '2%',
         }}
       >
         <Box
@@ -55,6 +65,7 @@ const FileUploadForm = () => {
             '& > :not(style)': { m: 1, width: '25ch' },
           }}
           component="form"
+          encType="multipart/form-data"
           onSubmit={onSubmit}
           noValidate
           autoComplete="off"
@@ -67,9 +78,10 @@ const FileUploadForm = () => {
           <Button
             sx={{
               display: 'flex',
-              flexDirection: 'column',
+              flexDirection: 'row',
               justifyContent: 'center',
             }}
+            startIcon={<UploadFile />}
             component="label"
             variant="outlined"
           >
