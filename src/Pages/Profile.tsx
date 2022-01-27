@@ -1,10 +1,13 @@
-import React from 'react';
-import { Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { RootState, useAppDispatch } from '..';
 import { useSelector } from 'react-redux';
 import UserFarmCard from '../User/UserFarmCard';
 import { useNavigate } from 'react-router-dom';
+import { CHART_COLORS } from '../utils';
+import AppDialog from '../globalComponents/AppDialog';
+import FileUploadForm from '../FarmData/FileUploadForm';
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -12,6 +15,19 @@ const Profile = () => {
     (state: RootState) => state.user.user
   );
   const navigate = useNavigate();
+  const [isDialogOpened, setDialog] = useState<boolean>(false);
+
+  const closeDialog = () => {
+    setDialog(false);
+  };
+
+  const openDialog = () => {
+    if (token) return setDialog(true);
+    navigate('/login');
+  };
+  const handleFileUpload = (file: File) => {
+    //dispatch(addFarm(file, currentUser.username) as unknown as Action)
+  };
 
   const showFarmDetails = () => {
     navigate('/');
@@ -21,6 +37,15 @@ const Profile = () => {
   };
 
   const FarmCards = () => {
+    if (!farms.length)
+      return (
+        <Typography
+          sx={{ fontSize: 14, textAlign: 'center' }}
+          color="text.secondary"
+        >
+          Your added farms will appear here!
+        </Typography>
+      );
     return (
       <>
         {farms?.map((farm) => (
@@ -36,16 +61,50 @@ const Profile = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box>
       <Box
-        component={Typography}
-        variant="h6"
-        color="grey"
-        sx={{ display: 'flex', flexGrow: 1, justifyContent: 'center' }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          mb: '2%',
+          color: `${CHART_COLORS.temperature.max}`,
+        }}
       >
-        Welcome {username}!
+        <Typography
+          variant="h6"
+          sx={{
+            textAlign: 'center',
+            border: `1px solid ${CHART_COLORS.temperature.min}`,
+            borderBottomLeftRadius: '20%',
+            borderTopRightRadius: '15%',
+            maxWidth: '25%',
+            padding: 1,
+            fontWeight: 'bold',
+          }}
+        >
+          Welcome {username}!
+        </Typography>
       </Box>
+      <Divider />
+      <Typography
+        variant="h6"
+        sx={{ textAlign: 'center', mb: '1%', mt: '1%' }}
+        gutterBottom
+      >
+        Manage Your Farms
+      </Typography>
       <FarmCards />
+      <AppDialog
+        open={isDialogOpened}
+        onClose={closeDialog}
+        title="Add More Data to Your Farm"
+      >
+        <FileUploadForm
+          handleFileUpload={handleFileUpload}
+          label="update farm"
+        />
+      </AppDialog>
     </Box>
   );
 };

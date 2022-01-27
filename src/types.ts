@@ -48,7 +48,7 @@ export interface QueryParameters {
   farmname?: string;
 }
 
-export interface User{
+export interface User {
   username: string;
   token: string;
   farms: Pick<Farm, 'farmname'>[];
@@ -57,11 +57,9 @@ export interface UserCredentialsBase {
   username: string;
 }
 
-export interface UserCredentials extends UserCredentialsBase{
+export interface UserCredentials extends UserCredentialsBase {
   token: string;
 }
-export interface UserCredentialsInput extends UserCredentialsBase{
+export interface UserCredentialsInput extends UserCredentialsBase {
   password: string;
 }
-
-

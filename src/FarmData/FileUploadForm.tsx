@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 interface FileUploadFormProps {
   handleFileUpload: (file: File) => void;
+  label: string;
 }
 
-const FileUploadForm = ({ handleFileUpload }: FileUploadFormProps) => {
+const FileUploadForm = ({ handleFileUpload, label }: FileUploadFormProps) => {
   const navigate = useNavigate();
   const [csvFile, setFile] = useState<File>();
   const [helperText, setHelperText] = useState<string>('No file choosen');
@@ -101,7 +102,7 @@ const FileUploadForm = ({ handleFileUpload }: FileUploadFormProps) => {
             {helperText}
           </FormHelperText>
           <Button type="submit" variant="contained" disabled={!csvFile?.name}>
-            create farm
+            {label}
           </Button>
         </Box>
       </Box>

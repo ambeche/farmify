@@ -41,8 +41,8 @@ const App = () => {
     navigate('/login');
   };
   const handleFileUpload = (file: File) => {
-    dispatch(addFarm(file, currentUser.username) as unknown as Action)
-  }
+    dispatch(addFarm(file, currentUser.username) as unknown as Action);
+  };
 
   return (
     <Box>
@@ -64,7 +64,10 @@ const App = () => {
         onClose={closeFarmCreationDialog}
         title="CSV File Upload for Farm Creation"
       >
-        <FileUploadForm handleFileUpload={handleFileUpload}/>
+        <FileUploadForm
+          handleFileUpload={handleFileUpload}
+          label="create farm"
+        />
       </AppDialog>
     </Box>
   );

@@ -256,6 +256,21 @@ const addFarm = (file: File, owner: string) => {
   };
 };
 
+const addDataToExistingFarm = (file: File) => {
+  return async (
+    dispatch: ThunkDispatch<FarmState, void, AnyAction>
+  ): Promise<void> => {
+    try {
+      const addedFarmRecords = await farmService.createFarm(file);
+       
+      console.log('added', addedFarmRecords);
+    } catch (error) {
+      if (error instanceof Error)
+        console.log('create farm error', error.message);
+    }
+  };
+};
+
 export {
   setFarmData,
   setPage,
@@ -264,4 +279,5 @@ export {
   setFarmOptions,
   updateFarmOptions,
   resetFarmData,
+  addDataToExistingFarm,
 };
