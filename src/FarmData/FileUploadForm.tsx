@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, FormHelperText, Typography } from '@mui/material';
 import { CHART_COLORS } from '../utils';
 import { UploadFile } from '@mui/icons-material';
@@ -8,16 +8,35 @@ import { RootState } from '..';
 
 interface FileUploadFormProps {
   handleFileUpload: (file: File) => void;
+  closeDialog?: () => void;
   label: string;
 }
 
-const FileUploadForm = ({ handleFileUpload, label }: FileUploadFormProps) => {
+const FileUploadForm = ({
+  handleFileUpload,
+  label,
+  closeDialog,
+}: FileUploadFormProps) => {
   const { message, code, open } = useSelector(
     (state: RootState) => state.notice
   );
   const [csvFile, setFile] = useState<File>();
   const [helperText, setHelperText] = useState<string>('No file choosen');
   const [error, setError] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (open && code === 'success') {
+      closeDialog && closeDialog();
+      setError(false);
+      setHelperText('');
+      setFile(undefined);
+    }
+    if (code === 'error') {
+      setError(true);
+      setHelperText(message);
+      return;
+    }
+  }, [code, open, message]);
 
   // validates file as csv before uploading to the server
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,18 +62,7 @@ const FileUploadForm = ({ handleFileUpload, label }: FileUploadFormProps) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // file upload and server-side validation
-    // and error handling
     if (csvFile) handleFileUpload(csvFile);
-    if (code === 'error') {
-      setError(true);
-      setHelperText(message);
-      return;
-    }
-    // clean up form on success
-    setError(false);
-    setHelperText('');
-    setFile(undefined);
-    console.log('file ok', csvFile);
   };
 
   return (

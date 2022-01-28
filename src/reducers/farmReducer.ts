@@ -125,7 +125,10 @@ export const farmReducer = (
         farmStats: { ...state.farmStats, combinedFarms: [...action.payload] },
       };
     case 'SET_FARM_OPTIONS':
-      return { ...state, farmOptions: action.payload };
+      return {
+        ...state,
+        farmOptions: [...state.farmOptions, ...action.payload],
+      };
     case 'UPDATE_FARM_OPTIONS':
       return {
         ...state,
@@ -152,9 +155,9 @@ const updateFarmOptions = (option: FarmOptions) => {
     payload: option,
   };
 };
-const addNewFarmOption = (option: FarmOptions) => {
+const addFarmOption = (option: FarmOptions[]) => {
   return {
-    type: 'ADD_FARM_OPTIONS',
+    type: 'SET_FARM_OPTIONS',
     payload: option,
   };
 };
@@ -175,7 +178,6 @@ const setFarmOptions = () => {
         owner: farm.owner,
         selected: false,
       }));
-      console.log('farmoptoins', farms, options);
       // defined menu options for selecting farms
       const payload = [
         {
@@ -185,10 +187,7 @@ const setFarmOptions = () => {
         },
         ...options,
       ];
-      dispatch({
-        type: 'SET_FARM_OPTIONS',
-        payload,
-      });
+      dispatch(addFarmOption(payload));
     } catch (error) {
       if (error instanceof Error)
         console.log('farmDispatchError', error.message);
@@ -252,12 +251,13 @@ const addFarm = (file: File, owner: string) => {
         owner,
         selected: false,
       };
-
+      const message = `Farm '${addedFarmRecords[0].farmname}
+      ' was successfully created with ${addedFarmRecords.length} records`;
+      dispatch(addFarmOption([payload]));
       dispatch(
         updateCurrentUserOwnFarms({ farmname: addedFarmRecords[0].farmname })
       );
-      dispatch(addNewFarmOption(payload));
-      console.log('added', addedFarmRecords);
+      dispatch(notifyUser({ message, code: 'success', open: true }));
     } catch (error) {
       if (error instanceof Error)
         console.log('create farm error', error.message);
@@ -271,7 +271,8 @@ const addDataToExistingFarm = (file: File) => {
   ): Promise<void> => {
     try {
       const addedRecords = await farmService.updateFarmWithData(file);
-      const message = `${addedRecords.length} Records Successfully added to farm '${addedRecords[0].farmname}'`;
+      const message = `${addedRecords.length} 
+      Records Successfully added to farm '${addedRecords[0].farmname}'`;
 
       dispatch(notifyUser({ message, code: 'success', open: true }));
     } catch (error) {

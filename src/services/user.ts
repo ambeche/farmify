@@ -1,9 +1,5 @@
 import axios from 'axios';
-import {
-  UserCredentialsBase,
-  UserCredentialsInput,
-  User,
-} from '../types';
+import { UserCredentialsBase, UserCredentialsInput, User } from '../types';
 import { BASE_URL } from '../utils';
 
 const addUser = async (
@@ -16,14 +12,9 @@ const addUser = async (
   return res.data;
 };
 
-const login = async (
-  credentials: UserCredentialsInput
-): Promise<User> => {
-  const res = await axios.post<User>(
-    `${BASE_URL}/login`,
-    credentials
-  );
+const login = async (credentials: UserCredentialsInput): Promise<User> => {
+  const res = await axios.post<User>(`${BASE_URL}/login`, credentials);
   return res.data;
 };
 
-export default {addUser, login}
+export default { addUser, login };

@@ -51,7 +51,7 @@ const UserForm = ({
         />
       </div>
       <Button type="submit" variant="outlined">
-        {btnLabel}{' '}
+        {btnLabel}
       </Button>
     </Box>
   );

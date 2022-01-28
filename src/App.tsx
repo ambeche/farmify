@@ -14,6 +14,7 @@ import AppDialog from './globalComponents/AppDialog';
 import { useSelector } from 'react-redux';
 import Profile from './Pages/Profile';
 import UserNotification from './globalComponents/UserNotification';
+import { notifyUser } from './reducers/notificationReducer';
 
 const App = () => {
   const navigate = useNavigate();
@@ -38,9 +39,18 @@ const App = () => {
   };
 
   const openFarmCreationDialog = () => {
+    // allows farm creation only for authenticated user
     if (currentUser?.token) return setFarmCreationDialog(true);
+    dispatch(
+      notifyUser({
+        message: 'Login or Register to add your own farm',
+        code: 'info',
+        open: true,
+      }) as unknown as Action
+    );
     navigate('/login');
   };
+
   const handleFileUpload = (file: File) => {
     dispatch(addFarm(file, currentUser.username) as unknown as Action);
   };
@@ -68,6 +78,7 @@ const App = () => {
         <FileUploadForm
           handleFileUpload={handleFileUpload}
           label="create farm"
+          closeDialog={closeFarmCreationDialog}
         />
       </AppDialog>
       <UserNotification />
