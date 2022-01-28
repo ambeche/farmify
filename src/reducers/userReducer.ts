@@ -1,6 +1,6 @@
 import { notifyUser } from './notificationReducer';
 import { Action } from './farmReducer';
-import { Farm, User, UserCredentialsInput } from './../types';
+import { Farm, User, UserCredentials, UserCredentialsInput } from './../types';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import userService from '../services/user';
@@ -23,7 +23,12 @@ const userReducer = (state = initialUserState, action: Action) => {
     case 'LOGIN_USER':
       return {
         ...state,
-        user: action.payload,
+        user: { ...state.user, ...action.payload },
+      };
+    case 'SET_USER_FARMS':
+      return {
+        ...state,
+        user: { ...state.user, farms: [...action.payload] },
       };
     case 'UPDATE_USER':
       return {
@@ -49,10 +54,27 @@ const logoutUser = () => {
   };
 };
 
-const setCurrentUser = (currentUser: User) => {
+const setCurrentUserCredentials = (payload: UserCredentials) => {
   return {
     type: 'LOGIN_USER',
-    payload: currentUser,
+    payload,
+  };
+};
+const setCurrentUserOwnFarms = (token: string) => {
+  return async (
+    dispatch: ThunkDispatch<Pick<Farm, 'farmname'>[], void, AnyAction>
+  ): Promise<void> => {
+    try {
+      const userOnwFarms = await userService.getUser(token);
+      if (userOnwFarms && userOnwFarms.farms) {
+        dispatch({
+          type: 'SET_USER_FARMS',
+          payload: [...userOnwFarms.farms],
+        });
+      }
+    } catch (error) {
+      if (error instanceof Error) console.log(error.message);
+    }
   };
 };
 const updateCurrentUserOwnFarms = (farmname: Pick<Farm, 'farmname'>) => {
@@ -67,13 +89,16 @@ const loginUser = ({ username, password }: UserCredentialsInput) => {
     dispatch: ThunkDispatch<UserState, void, AnyAction>
   ): Promise<void> => {
     try {
-      const user: User = await userService.login({ username, password });
+      const user: UserCredentials = await userService.login({
+        username,
+        password,
+      });
       //console.log('user', user)
       if (user) {
         // persists user's token to local storage
         window.localStorage.setItem('currentUser', JSON.stringify(user));
         farmService.setToken(user); //sets Authorization header bearer token
-        dispatch(setCurrentUser(user));
+        dispatch(setCurrentUserCredentials(user));
         dispatch(
           notifyUser({ message: 'login', code: 'success', open: false })
         );
@@ -107,6 +132,6 @@ export {
   setNewUser,
   loginUser,
   logoutUser,
-  setCurrentUser,
+  setCurrentUserOwnFarms,
   updateCurrentUserOwnFarms,
 };

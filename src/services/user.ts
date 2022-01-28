@@ -12,9 +12,16 @@ const addUser = async (
   return res.data;
 };
 
+const getUser = async (token: string): Promise<User> => {
+  const res = await axios.get<User>(`${BASE_URL}/users`, {
+    headers: { Authorization: `bearer ${token}` },
+  });
+  return res.data;
+};
+
 const login = async (credentials: UserCredentialsInput): Promise<User> => {
   const res = await axios.post<User>(`${BASE_URL}/login`, credentials);
   return res.data;
 };
 
-export default { addUser, login };
+export default { addUser, login, getUser };
