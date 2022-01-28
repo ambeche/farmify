@@ -55,7 +55,7 @@ export type Action =
       type: 'UPDATE_USER';
       payload: Pick<Farm, 'farmname'>;
     }
-    | {
+  | {
       type: 'SET_USER_FARMS';
       payload: Pick<Farm, 'farmname'>[];
     }

@@ -12,7 +12,7 @@ const UserNotification = () => {
     <Snackbar
       open={open}
       autoHideDuration={null}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
       <Alert
         elevation={6}
