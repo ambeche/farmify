@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, FormHelperText, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormHelperText,
+  Typography,
+  CircularProgress,
+} from '@mui/material';
 import { CHART_COLORS } from '../utils';
 import { UploadFile } from '@mui/icons-material';
 import { Navigate } from 'react-router-dom';
@@ -23,11 +29,13 @@ const FileUploadForm = ({
   const [csvFile, setFile] = useState<File>();
   const [helperText, setHelperText] = useState<string>('No file choosen');
   const [error, setError] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (open && code === 'success') {
       closeDialog && closeDialog();
       setError(false);
+      setLoading(false);
       setHelperText('');
       setFile(undefined);
     }
@@ -63,6 +71,18 @@ const FileUploadForm = ({
     event.preventDefault();
     // file upload and server-side validation
     if (csvFile) handleFileUpload(csvFile);
+    setLoading(true);
+  };
+
+  const Loading = () => {
+    if (!isLoading) return null;
+    return (
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'row' }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   };
 
   return (
@@ -99,6 +119,7 @@ const FileUploadForm = ({
           >
             Upload your farm data as a comma separated csv file!
           </Typography>
+          <Loading />
           <Button
             sx={{
               display: 'flex',
