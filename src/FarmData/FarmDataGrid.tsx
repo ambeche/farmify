@@ -28,19 +28,19 @@ const FarmDataGrid = () => {
   );
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+  const setFarmFiltering = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const closeFarmMenu = () => {
+    setAnchorEl(null);
+  };
+
   useEffect(() => {
     if (!pages.find((page) => page.index === currentPage)) {
       dispatch(setFarmData(nextPage) as unknown as Action);
     }
   }, [nextPage, currentPage, farmOptions]);
 
-  const setFarmFiltering = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const closeFarmMenu = () => {
-    setAnchorEl(null);
-  };
   // sets server pagination for the records of the selected farm
   const handleFarmSelection = (selectedItem?: FarmOptions) => {
     if (selectedItem?.selected === false) {
