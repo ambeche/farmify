@@ -65,6 +65,10 @@ export type Action =
     }
   | {
       type: 'RESET_NOTICE';
+    }
+    | {
+      type: 'SET_FARM_MENU';
+      payload: boolean
     };
 
 export type FarmState = {
@@ -77,6 +81,7 @@ export type FarmState = {
     combinedFarms: FarmStatistics[];
   };
   farmOptions: FarmOptions[];
+  isFarmMenuOPened: boolean;
 };
 
 const initialState: FarmState = {
@@ -89,6 +94,7 @@ const initialState: FarmState = {
     combinedFarms: [],
   },
   farmOptions: [],
+  isFarmMenuOPened: false,
 };
 
 export const farmReducer = (
@@ -142,6 +148,11 @@ export const farmReducer = (
             : { ...option, selected: false }
         ),
       };
+      case 'SET_FARM_MENU':
+        return {
+          ...state,
+          isFarmMenuOPened: action.payload,
+        };
     default:
       return state;
   }
@@ -168,6 +179,13 @@ const addFarmOption = (option: FarmOptions[]) => {
 const resetFarmData = () => {
   return {
     type: 'RESET_FARM_DATA',
+  };
+};
+// launches the farm menu from any component
+const toggleFarmMenu = (payload: boolean) => {
+  return {
+    type: 'SET_FARM_MENU',
+    payload
   };
 };
 
@@ -296,4 +314,5 @@ export {
   updateFarmOptions,
   resetFarmData,
   addDataToExistingFarm,
+  toggleFarmMenu,
 };
