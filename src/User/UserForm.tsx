@@ -50,7 +50,9 @@ const UserForm = ({
           onChange={handlePasswordChange}
         />
       </div>
-      <Button type="submit" variant='outlined'>{btnLabel} </Button>
+      <Button type="submit" variant="outlined">
+        {btnLabel}
+      </Button>
     </Box>
   );
 };

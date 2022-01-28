@@ -28,18 +28,30 @@ const setQueryParams = ({
   if (type) metrictype = type;
   if (yr) year = yr;
 };
+
 const getFarms = async (): Promise<Farm[]> => {
   const res = await axios.get<Farm[]>(`${BASE_URL}/farms`);
   return res.data;
 };
 
-const createFarm = async (file: File): Promise<FarmRecord[]> => {
+const uploadFile = async (
+  file: File,
+  endpoint: string
+): Promise<FarmRecord[]> => {
   const data = new FormData();
   data.append('farmdata', file);
-  const res = await axios.post<FarmRecord[]>(`${BASE_URL}/farms`, data, {
+  const res = await axios.post<FarmRecord[]>(`${BASE_URL}${endpoint}`, data, {
     headers: { Authorization: token, 'content-type': 'multipart/form-data' },
   });
   return res.data;
+};
+
+const createFarm = async (file: File): Promise<FarmRecord[]> => {
+  return uploadFile(file, '/farms');
+};
+
+const updateFarmWithData = async (file: File): Promise<FarmRecord[]> => {
+  return uploadFile(file, '/farms/data');
 };
 
 const getFarmData = async (page = 1): Promise<FarmRecord[]> => {
@@ -78,6 +90,7 @@ export default {
   getFarmStatisticsByName,
   getFarms,
   createFarm,
+  updateFarmWithData,
   setQueryParams,
   setToken,
 };

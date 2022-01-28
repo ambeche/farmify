@@ -2,10 +2,8 @@ import React from 'react';
 import { loginUser, setNewUser } from '../reducers/userReducer';
 import { UserCredentialsInput } from '../types';
 import RegisterOrLogin from '../User/RegisterOrLogin';
-import { RootState, useAppDispatch } from '..';
+import { useAppDispatch } from '..';
 import { Action } from '../reducers/farmReducer';
-import {useSelector} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
 
 interface LoginProps {
   submissionType: 'login';
@@ -19,17 +17,12 @@ type AuthenticationProps = LoginProps | RegisterProps;
 
 const Authentication = ({ submissionType }: AuthenticationProps) => {
   const dispatch = useAppDispatch();
-  const {token} = useSelector((state: RootState) => state.user.user)
-  const navigate = useNavigate();
 
-  const onSuccess = () => {
-    navigate('/', { replace: true });
-  }
   const handleUserRegistration = (credentials: UserCredentialsInput) => {
-    dispatch(setNewUser(credentials,  onSuccess) as unknown as Action);
+    dispatch(setNewUser(credentials) as unknown as Action);
   };
   const handleUserLogin = (credentials: UserCredentialsInput) => {
-    dispatch(loginUser(credentials, onSuccess) as unknown as Action);
+    dispatch(loginUser(credentials) as unknown as Action);
   };
 
   switch (submissionType) {

@@ -1,3 +1,4 @@
+import { notifyUser } from './notificationReducer';
 import { Action } from './farmReducer';
 import { Farm, User, UserCredentialsInput } from './../types';
 import { ThunkDispatch } from 'redux-thunk';
@@ -12,28 +13,27 @@ export type UserState = {
 const initialUserState: UserState = {
   user: {
     token: '',
-    username: '', 
+    username: '',
     farms: [],
   },
- 
 };
 
 const userReducer = (state = initialUserState, action: Action) => {
   switch (action.type) {
     case 'LOGIN_USER':
       return {
-        ...state, user: action.payload
-        
+        ...state,
+        user: action.payload,
       };
     case 'UPDATE_USER':
       return {
         ...state,
-        user: {...state.user, farms:[...state.user.farms, action.payload]}
+        user: { ...state.user, farms: [...state.user.farms, action.payload] },
       };
     case 'LOGOUT_USER':
       return {
         ...state,
-        user: { token: '', username: '', farms: [{farmname: ''}] },
+        user: { token: '', username: '', farms: [{ farmname: '' }] },
       };
     default:
       return state;
@@ -62,43 +62,39 @@ const updateCurrentUserOwnFarms = (farmname: Pick<Farm, 'farmname'>) => {
   };
 };
 
-const loginUser = (
-  { username, password }: UserCredentialsInput,
-  onSuccess?: () => void
-) => {
+const loginUser = ({ username, password }: UserCredentialsInput) => {
   return async (
     dispatch: ThunkDispatch<UserState, void, AnyAction>
   ): Promise<void> => {
     try {
       const user: User = await userService.login({ username, password });
-      console.log('user', user)
+      //console.log('user', user)
       if (user) {
-        dispatch(setCurrentUser(user));
         // persists user's token to local storage
         window.localStorage.setItem('currentUser', JSON.stringify(user));
         farmService.setToken(user); //sets Authorization header bearer token
-        console.log('own', user);
-        if (onSuccess) onSuccess();
+        dispatch(setCurrentUser(user));
+        dispatch(
+          notifyUser({ message: 'login', code: 'success', open: false })
+        );
       }
     } catch (error) {
-      if (error instanceof Error) console.log('login error', error.message);
+      if (error instanceof Error) {
+        console.log('login error', error.message);
+      }
     }
   };
 };
 
 //Authenticate user upon a successful registration
-const setNewUser = (
-  { username, password }: UserCredentialsInput,
-  onSuccess?: () => void
-) => {
+const setNewUser = ({ username, password }: UserCredentialsInput) => {
   return async (
     dispatch: ThunkDispatch<UserState, void, AnyAction>
   ): Promise<void> => {
     try {
       const user = await userService.addUser({ username, password });
       if (user.username)
-        dispatch(loginUser({ username: user.username, password }, onSuccess));
-      console.log('new user', user);
+        dispatch(loginUser({ username: user.username, password }));
     } catch (error) {
       if (error instanceof Error)
         console.log('farmdataDispatchError', error.message);
