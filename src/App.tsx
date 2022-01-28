@@ -6,7 +6,10 @@ import { RootState, useAppDispatch } from '.';
 import { Action, addFarm, setFarmOptions } from './reducers/farmReducer';
 import Home from './Pages/Home';
 import Authentication from './Pages/Authentication';
-import { setCurrentUserOwnFarms, setCurrentUserCredentials } from './reducers/userReducer';
+import {
+  setCurrentUserOwnFarms,
+  setCurrentUserCredentials,
+} from './reducers/userReducer';
 import { UserCredentials } from './types';
 import farmService from './services/farm';
 import FileUploadForm from './FarmData/FileUploadForm';
