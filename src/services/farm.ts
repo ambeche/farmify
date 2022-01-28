@@ -14,7 +14,7 @@ const statsDefaultMetric = MetricType.Temperature;
 const statsDefaultName = "Noora's farm";
 const statsDefaultYear = 2019;
 
-let token: string;
+export let token: string;
 
 const setToken = (newToken: UserCredentials) =>
   (token = `bearer ${newToken.token}`);

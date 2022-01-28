@@ -23,7 +23,10 @@ const userReducer = (state = initialUserState, action: Action) => {
     case 'LOGIN_USER':
       return {
         ...state,
-        user: { ...state.user, ...action.payload },
+        user: {
+          ...state.user,
+          ...action.payload,
+        },
       };
     case 'SET_USER_FARMS':
       return {
@@ -33,7 +36,10 @@ const userReducer = (state = initialUserState, action: Action) => {
     case 'UPDATE_USER':
       return {
         ...state,
-        user: { ...state.user, farms: [...state.user.farms, action.payload] },
+        user: {
+          ...state.user,
+          farms: [...state.user.farms, { ...action.payload }],
+        },
       };
     case 'LOGOUT_USER':
       return {
@@ -72,6 +78,7 @@ const setCurrentUserOwnFarms = (token: string) => {
           payload: [...userOnwFarms.farms],
         });
       }
+      console.log(userOnwFarms);
     } catch (error) {
       if (error instanceof Error) console.log(error.message);
     }
@@ -93,12 +100,13 @@ const loginUser = ({ username, password }: UserCredentialsInput) => {
         username,
         password,
       });
-      //console.log('user', user)
+
       if (user) {
         // persists user's token to local storage
         window.localStorage.setItem('currentUser', JSON.stringify(user));
         farmService.setToken(user); //sets Authorization header bearer token
         dispatch(setCurrentUserCredentials(user));
+        dispatch(setCurrentUserOwnFarms(user.token));
         dispatch(
           notifyUser({ message: 'login', code: 'success', open: false })
         );
@@ -132,6 +140,7 @@ export {
   setNewUser,
   loginUser,
   logoutUser,
+  setCurrentUserCredentials,
   setCurrentUserOwnFarms,
   updateCurrentUserOwnFarms,
 };

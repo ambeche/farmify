@@ -6,7 +6,7 @@ import { RootState, useAppDispatch } from '.';
 import { Action, addFarm, setFarmOptions } from './reducers/farmReducer';
 import Home from './Pages/Home';
 import Authentication from './Pages/Authentication';
-import { setCurrentUserOwnFarms } from './reducers/userReducer';
+import { setCurrentUserOwnFarms, setCurrentUserCredentials } from './reducers/userReducer';
 import { UserCredentials } from './types';
 import farmService from './services/farm';
 import FileUploadForm from './FarmData/FileUploadForm';
@@ -29,7 +29,8 @@ const App = () => {
     if (isLoggedIn) {
       // sets credentials from storage if it exits.
       const user = JSON.parse(isLoggedIn) as UserCredentials;
-      dispatch(setCurrentUserOwnFarms(currentUser.token) as unknown as Action);
+      dispatch(setCurrentUserCredentials(user) as unknown as Action);
+      dispatch(setCurrentUserOwnFarms(user.token) as unknown as Action);
       farmService.setToken(user);
     }
   }, []);
