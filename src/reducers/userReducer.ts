@@ -5,6 +5,8 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import userService from '../services/user';
 import farmService from '../services/farm';
+import axios from 'axios';
+import { serverErrorHandler } from '../utils';
 
 export type UserState = {
   user: User;
@@ -112,9 +114,7 @@ const loginUser = ({ username, password }: UserCredentialsInput) => {
         );
       }
     } catch (error) {
-      if (error instanceof Error) {
-        console.log('login error', error.message);
-      }
+      serverErrorHandler(error, dispatch);
     }
   };
 };
@@ -129,8 +129,7 @@ const setNewUser = ({ username, password }: UserCredentialsInput) => {
       if (user.username)
         dispatch(loginUser({ username: user.username, password }));
     } catch (error) {
-      if (error instanceof Error)
-        console.log('farmdataDispatchError', error.message);
+      serverErrorHandler(error, dispatch);
     }
   };
 };

@@ -10,7 +10,7 @@ import {
 } from './../types';
 import { updateCurrentUserOwnFarms } from './userReducer';
 import { Notification, notifyUser } from './notificationReducer';
-import { AxiosError } from 'axios';
+import { serverErrorHandler } from '../utils';
 
 export interface Page {
   index: number;
@@ -66,9 +66,9 @@ export type Action =
   | {
       type: 'RESET_NOTICE';
     }
-    | {
+  | {
       type: 'SET_FARM_MENU';
-      payload: boolean
+      payload: boolean;
     };
 
 export type FarmState = {
@@ -148,11 +148,11 @@ export const farmReducer = (
             : { ...option, selected: false }
         ),
       };
-      case 'SET_FARM_MENU':
-        return {
-          ...state,
-          isFarmMenuOPened: action.payload,
-        };
+    case 'SET_FARM_MENU':
+      return {
+        ...state,
+        isFarmMenuOPened: action.payload,
+      };
     default:
       return state;
   }
@@ -185,7 +185,7 @@ const resetFarmData = () => {
 const toggleFarmMenu = (payload: boolean) => {
   return {
     type: 'SET_FARM_MENU',
-    payload
+    payload,
   };
 };
 
@@ -229,8 +229,7 @@ const setFarmData = (page = 1) => {
         payload,
       });
     } catch (error) {
-      if (error instanceof Error)
-        console.log('farmdataDispatchError', error.message);
+      serverErrorHandler(error, dispatch);
     }
   };
 };
@@ -254,8 +253,7 @@ const setFarmStatistics = (isCombined: boolean, page?: number) => {
         payload,
       });
     } catch (error) {
-      if (error instanceof Error)
-        console.log('StatsDispatchError', error.message);
+      serverErrorHandler(error, dispatch);
     }
   };
 };
@@ -281,8 +279,7 @@ const addFarm = (file: File, owner: string) => {
       );
       dispatch(notifyUser({ message, code: 'success', open: true }));
     } catch (error) {
-      if (error instanceof Error)
-        console.log('create farm error', error.message);
+      serverErrorHandler(error, dispatch);
     }
   };
 };
@@ -298,9 +295,7 @@ const addDataToExistingFarm = (file: File) => {
 
       dispatch(notifyUser({ message, code: 'success', open: true }));
     } catch (error) {
-      if (error as AxiosError) {
-        //console.log('update farm error', error.message);
-      }
+      serverErrorHandler(error, dispatch);
     }
   };
 };
