@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Notification, notifyUser } from './reducers/notificationReducer';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
-import e from 'express';
 
 export const BASE_URL = 'https://farmify-api.herokuapp.com';
 export const MONTHS = [

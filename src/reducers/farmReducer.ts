@@ -272,7 +272,7 @@ const addFarm = (file: File, owner: string) => {
         selected: false,
       };
       const message = `Farm '${addedFarmRecords[0].farmname}
-      ' was successfully created with ${addedFarmRecords.length} records`;
+      ' was successfully created with ${addedFarmRecords.length} records. Some records may have been discarded if they were invalid`;
       dispatch(addFarmOption([payload]));
       dispatch(
         updateCurrentUserOwnFarms({ farmname: addedFarmRecords[0].farmname })

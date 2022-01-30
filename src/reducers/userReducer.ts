@@ -5,7 +5,6 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import userService from '../services/user';
 import farmService from '../services/farm';
-import axios from 'axios';
 import { serverErrorHandler } from '../utils';
 
 export type UserState = {
