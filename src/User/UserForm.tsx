@@ -56,7 +56,7 @@ const UserForm = ({
           type="text"
           value={username}
           onChange={handleUsernameChange}
-          helperText={ helperText || "username is Case sensitive!"}
+          helperText={helperText || 'username is Case sensitive!'}
         />
       </div>
       <div>
@@ -69,7 +69,7 @@ const UserForm = ({
           type="password"
           value={password}
           onChange={handlePasswordChange}
-          helperText={ helperText}
+          helperText={helperText}
         />
       </div>
       <Button type="submit" variant="outlined">

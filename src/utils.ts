@@ -46,9 +46,6 @@ export const CHART_COLORS = {
   },
 };
 
-export type ServerError = {
-  error: string;
-};
 export const serverErrorHandler = (
   error: unknown,
   dispatch: ThunkDispatch<Notification, void, AnyAction>
