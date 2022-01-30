@@ -42,9 +42,11 @@ const FileUploadForm = ({
     if (code === 'error') {
       setError(true);
       setHelperText(message);
+      setLoading(false);
+      setFile(undefined);
       return;
     }
-  }, [code, open, message]);
+  }, [code, open, message, isLoading]);
 
   // validates file as csv before uploading to the server
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +119,9 @@ const FileUploadForm = ({
           <Typography
             sx={{ display: 'flex', justifyContent: 'center', paddingBottom: 2 }}
           >
-            Upload your farm data as a comma separated csv file!
+            Upload your farm data as a comma separated csv file! Any invalid
+            records in the file will be discarded. Only temperature, ph, and
+            rainfall metrics are allowed.
           </Typography>
           <Loading />
           <Button
